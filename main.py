@@ -24,6 +24,7 @@ def read_data(filename):
     data_transposed = data_transposed.astype(np.float32)
     return data_transposed 
 
+# two_theta, intensity = separate_x_y(data)
 def separate_x_y_axis(data):
     """To separate the data into two-theta(x-axis) and intensities(y-axis).
 
@@ -36,3 +37,36 @@ def separate_x_y_axis(data):
     two_theta = data[0]
     intensity = data[1:]
     return two_theta, intensity
+
+# log10 of all data
+# two_theta_log = np.log10(two_theta)
+# intensity_log = np.log10(intensity)
+
+def plot_data(two_theta, intensity):
+    """Plot the graph of data.
+
+    Args:
+        two_theta (1-D array)
+        intensity (2-D array)
+    """
+    for i in range(intensity.shape[0]):
+        plt.plot(two_theta, intensity[i], linewidth = 0.5)
+    plt.title("intensity")
+    plt.xlabel(r'$2\theta$')
+    plt.ylabel("intensity")
+    plt.show()
+
+def plot_data_log10(two_theta, intensity):
+    """Plot the graph of data after log10.
+
+    Args:
+        two_theta (1-D array)
+        intensity (2-D array)
+    """
+    for i in range(intensity.shape[0]):
+        plt.loglog(two_theta, intensity[i], linewidth = 0.5)
+        # plt.plot(two_theta_log, intensity_log[i], linewidth = 0.5)
+    plt.title("intensity")
+    plt.xlabel(r'$2\theta$')
+    plt.ylabel("intensity")
+    plt.show()
