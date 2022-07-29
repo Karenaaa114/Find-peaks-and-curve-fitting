@@ -2,6 +2,9 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 
+from scipy.signal import find_peaks
+from scipy.optimize import curve_fit
+
 # filename = "NH4OH-FAU-Practice-data.csv"
 # data = read_data(filename)
 def read_data(filename):
@@ -70,3 +73,34 @@ def plot_data_log10(two_theta, intensity):
     plt.xlabel(r'$2\theta$')
     plt.ylabel("intensity")
     plt.show()
+
+#get index
+def get_index(datax, x_value):
+    lo = 0
+    for lo in range(len(datax)):
+        if datax[lo] >= x_value:
+            break
+        return lo
+
+#get peak position of peaks in one interval
+def getPeak(datax, datay, x_interval):
+    min_index = get_index(datax, x_interval[0])
+    max_index = get_index(datax, x_interval[1])
+    y = datay[min_index:max_index+1]
+    plt.plot(datax[min_index:max_index+1],y)
+    return find_peaks(y,height=0,distance=100)[0]+min_index
+
+#get peak position of peaks in several interval
+def getAllPeaks(datax,datay,x_interval):
+    # Peaks = []
+    for intens in datay:
+        peak = getPeak(datax,intens,x_interval)
+        if len(peak.tolist()) > 0:
+            peakindex = peak.tolist()[0]
+            Peaks = [datax[peakindex],intens[peakindex]]
+            plt.scatter([datax[peakindex]],[intens[peakindex]],marker='x')
+            print(Peaks)
+        else:
+            print("There is no peak")
+        # Peaks.append([datax[pV],intens[pV]])
+    return Peaks
