@@ -74,24 +74,50 @@ def plot_data_log10(two_theta, intensity):
     plt.ylabel("intensity")
     plt.show()
 
-#get index
-def get_index(datax, x_value):
+def get_index(datax,x_value):
+    """Get index of the x value.
+
+    Args:
+        datax (1-D array)
+        x_value (2-D list)
+
+    Returns:
+        lo: index of the x value
+    """
     lo = 0
     for lo in range(len(datax)):
         if datax[lo] >= x_value:
             break
-        return lo
+    return lo
 
-#get peak position of peaks in one interval
-def getPeak(datax, datay, x_interval):
-    min_index = get_index(datax, x_interval[0])
-    max_index = get_index(datax, x_interval[1])
+def getPeak(datax,datay,x_interval):
+    """
+
+    Args:
+        datax (_type_): _description_
+        datay (_type_): _description_
+        x_interval (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    min_index = get_index(datax,x_interval[0])
+    max_index = get_index(datax,x_interval[1])
     y = datay[min_index:max_index+1]
     plt.plot(datax[min_index:max_index+1],y)
     return find_peaks(y,height=0,distance=100)[0]+min_index
 
-#get peak position of peaks in several interval
 def getAllPeaks(datax,datay,x_interval):
+    """_summary_
+
+    Args:
+        datax (_type_): _description_
+        datay (_type_): _description_
+        x_interval (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     # Peaks = []
     for intens in datay:
         peak = getPeak(datax,intens,x_interval)
