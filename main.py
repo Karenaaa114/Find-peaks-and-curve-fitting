@@ -150,8 +150,15 @@ plt.show()
 # print(all_peaks)
 # print(f"peaks:{R} ")
 
-"""def Gaussian function (not sure use whith one)"""
+"""define Gaussian function (not sure use whith one)"""
 def Gaussian(x,amp,mu,sigma):
     return amp / (sigma * math.sqrt(2 * math.pi)) * np.exp(-(x-mu)**2 / (2*sigma**2))
 # def Gaussian(x,amp,mu,sigma):
 #     return amp * np.exp(-(x-mu)**2 / (2*sigma**2))
+
+"""adding up N Gaussian distributions"""
+def GaussianN(x,parameters):
+    g = np.zeros(x.shape[0])
+    for para in parameters:
+        g = g + Gaussian(x,para[0],para[1],para[2])
+    return g
