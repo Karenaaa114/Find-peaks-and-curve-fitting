@@ -92,8 +92,21 @@ def get_index(datax,x_value):
             break
     return lo
 
-def getPeak(datax,datay,x_interval):
+def get_index_in_interval(datax,x_interval):
+    """Get index of x interval.
+
+    Args:
+        datax (1-D array)
+        x_interval (1-D list)
+
+    Returns:
+        index: index of x interval
     """
+    index = np.where( (datax>=x_interval[0]) & (datax<x_interval[1]))[0]
+    return index
+
+def getPeak(datax,datay,x_interval):
+    """_summary_
 
     Args:
         datax (_type_): _description_
@@ -107,7 +120,8 @@ def getPeak(datax,datay,x_interval):
     max_index = get_index(datax,x_interval[1])
     y = datay[min_index:max_index+1]
     plt.plot(datax[min_index:max_index+1],y)
-    return find_peaks(y,height=0,distance=100)[0]+min_index
+    peaks = find_peaks(y,height=0,distance=100)[0]+min_index
+    return peaks
 
 def getAllPeaks(datax,datay,x_interval):
     """_summary_
