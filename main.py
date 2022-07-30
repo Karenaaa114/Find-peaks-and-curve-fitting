@@ -2,6 +2,8 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 
+import math
+
 from scipy.signal import find_peaks
 from scipy.optimize import curve_fit
 
@@ -130,3 +132,26 @@ def getAllPeaks(datax,datay,x_interval):
             print("There is no peak")
         # Peaks.append([datax[pV],intens[pV]])
     return Peaks
+
+""" input interval return peaks position and graph of the peaks."""
+# x_interval = [[1.6,1.9],[6,7]]
+x_interval = [[6,7]]
+# x_interval = [[1.6,1.9]]
+# all_peaks = []
+for interval in x_interval:
+    print(f"in interval {interval}, the peaks are")
+    R = getAllPeaks(two_theta,intensity,interval)
+plt.title("intensity")
+plt.xlabel(r'$2\theta$')
+plt.ylabel("intensity")
+plt.show()
+    
+    # all_peaks.append(R)
+# print(all_peaks)
+# print(f"peaks:{R} ")
+
+"""def Gaussian function (not sure use whith one)"""
+def Gaussian(x,amp,mu,sigma):
+    return amp / (sigma * math.sqrt(2 * math.pi)) * np.exp(-(x-mu)**2 / (2*sigma**2))
+# def Gaussian(x,amp,mu,sigma):
+#     return amp * np.exp(-(x-mu)**2 / (2*sigma**2))
