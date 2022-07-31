@@ -182,10 +182,10 @@ def GaussianN(x,parameters):
 popt_gauss = []
 pcov_gauss = []
 perr_gauss = []
-for line in intensity:
+for i in range(intensity.shape[0]):
     interval_index = get_index_in_interval(two_theta, [6,7])
     select_data_x = two_theta[interval_index]
-    select_data_y = line[interval_index]
+    select_data_y = intensity[i][interval_index]
     popt, pcov = curve_fit(Gaussian, select_data_x, select_data_y, maxfev = 10000)
     perr = np.sqrt(np.diag(pcov)) #error
     popt_gauss.append(popt)
@@ -193,14 +193,12 @@ for line in intensity:
     perr_gauss.append(perr)
     # print(f"popt:{popt} ")
     # print(f"perr:{perr} ")
-    for popt in popt_gauss:
-        a,center,width = popt
-        # xfit = np.linspace(select_data_x.min(),select_data_x.max(),100)
-        xfit = np.linspace(select_data_x[0],select_data_x.max(),100)
-        yfit = Gaussian(xfit,*popt)
-        plt.plot(xfit,yfit,'--')
-        # print(a,center,width)
-# x_interval = [[6,7]]
+    # xfit = np.linspace(select_data_x.min(),select_data_x.max(),100)
+    xfit = np.linspace(select_data_x[0],select_data_x.max(),100)
+    yfit = Gaussian(xfit,*popt)
+    plt.plot(xfit,yfit,'--',label='fitting')
+    # print(a,center,width)
+    # x_interval = [[6,7]]
 plt.xlim(5.75,7)
 plt.ylim(0,0.02)
 plt.title("Gaussian fitting")
