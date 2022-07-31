@@ -7,8 +7,7 @@ import math
 from scipy.signal import find_peaks
 from scipy.optimize import curve_fit
 
-# filename = "NH4OH-FAU-Practice-data.csv"
-# data = read_data(filename)
+
 def read_data(filename):
     """Return the data from csv file and transpose the data to read by row.
 
@@ -29,7 +28,11 @@ def read_data(filename):
     data_transposed = data_transposed.astype(np.float32)
     return data_transposed 
 
-# two_theta, intensity = separate_x_y(data)
+
+filename = "NH4OH-FAU-Practice-data.csv"
+data = read_data(filename)
+
+
 def separate_x_y_axis(data):
     """To separate the data into two-theta(x-axis) and intensities(y-axis).
 
@@ -42,6 +45,8 @@ def separate_x_y_axis(data):
     two_theta = data[0]
     intensity = data[1:]
     return two_theta, intensity
+
+two_theta, intensity = separate_x_y_axis(data)
 
 # log10 of all data
 # two_theta_log = np.log10(two_theta)
@@ -206,3 +211,11 @@ plt.xlabel(r'$2\theta$')
 plt.ylabel("intensity")
 # plt.legend()
 plt.show()
+
+"""print height, center, width and are for Gaussian fitting"""
+for i in range(len(popt_gauss)):
+    print(f"\nthe {i}th line: ")
+    print( "height = %0.7f (+/-) %0.7f" % (popt_gauss[i][0], perr_gauss[i][0]))
+    print( "center = %0.7f (+/-) %0.7f" % (popt_gauss[i][1], perr_gauss[i][1]))
+    print( "width = %0.7f (+/-) %0.7f" % (popt_gauss[i][2], perr_gauss[i][2]))
+    print( "area = %0.7f" % np.trapz(Gaussian(two_theta, *popt_gauss[i])))
