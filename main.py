@@ -6,6 +6,8 @@ import math
 
 from scipy.signal import find_peaks
 from scipy.optimize import curve_fit
+from lmfit import models
+from lmfit.models import GaussianModel, LorentzianModel, PseudoVoigtModel, ExponentialModel
 
 
 def read_data(filename):
@@ -183,7 +185,7 @@ def GaussianN(x,parameters):
     return g
 
 
-""" Gaussian fitting"""
+""" Gaussian fitting menthod 1 (fitting display unwell)"""
 popt_gauss = []
 pcov_gauss = []
 perr_gauss = []
@@ -212,10 +214,37 @@ plt.ylabel("intensity")
 # plt.legend()
 plt.show()
 
-"""print height, center, width and are for Gaussian fitting"""
+"""print height, center, width and area for Gaussian fitting"""
 for i in range(len(popt_gauss)):
     print(f"\nthe {i}th line: ")
     print( "height = %0.7f (+/-) %0.7f" % (popt_gauss[i][0], perr_gauss[i][0]))
     print( "center = %0.7f (+/-) %0.7f" % (popt_gauss[i][1], perr_gauss[i][1]))
     print( "width = %0.7f (+/-) %0.7f" % (popt_gauss[i][2], perr_gauss[i][2]))
     print( "area = %0.7f" % np.trapz(Gaussian(two_theta, *popt_gauss[i])))
+
+
+"""(Gaussian) fitting method 2 (fitting display well for normal gaussian distribution"""
+for i in range(intensity.shape[0]):
+    interval_index = get_index_in_interval(two_theta, [6,7])
+    x_interval = two_theta[interval_index]
+    y_interval = intensity[i][interval_index]
+    y_base = y_interval - min(y_interval)
+
+    model = GaussianModel()
+    # model = ExponentialModel()
+    # model = LorentzianModel()
+    # model = PseudoVoigtModel()
+    # model = ExponentialModel()
+    pars=model.guess(y_interval,x=x_interval)
+    # pars = model.make_params()
+    output = model.fit(y_base, pars, x=x_interval)
+    plt.plot(x_interval, y_interval, '-', label='original data')
+    plt.plot(x_interval, y_base, label='data staring at 0')
+    plt.plot(x_interval, output.best_fit, '--', label='fitting')
+    plt.title('Gaussian fitting for dataset %d' %i)
+    # plt.title('Lorentzian fitting for dataset %d' %i)
+    # plt.title('Voigt fitting for dataset %d' %i)
+    plt.xlabel(r'$2\theta$')
+    plt.ylabel("intensity")
+    plt.legend()
+    plt.show()
