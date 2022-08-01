@@ -294,21 +294,24 @@ for i in range(intensity.shape[0]):
     plt.plot(x_interval, y_interval, '-', label='original data')
     # plt.plot(x, y_base, label='data staring at 0')
     # plt.plot(x, output.best_fit, '--', label='fit')
-    # plt.title('Gaussian fitting for dataset %d' %i)
+    plt.title('Gaussian fitting for dataset %d' %i)
     # plt.title('Lorentzian fitting for dataset %d' %i)
-    plt.title('Voigt fitting for dataset %d' %i)
+    # plt.title('Voigt fitting for dataset %d' %i)
 
     baseline = baseline_als(y_interval,100000,0.01)
     baseline_subtracted = y_interval - baseline
     plt.plot(x_interval, baseline,':',label='baseline')
     plt.plot(x_interval, baseline_subtracted,label='after background subtraction')
     pars1=model.guess(baseline_subtracted, x=x_interval)
-    output1 = model.fit(baseline_subtracted, pars, x=x_interval)
-    plt.plot(x_interval, output1.best_fit, '--', label='fitting')
+    fitting = model.fit(baseline_subtracted, pars, x=x_interval)
+    plt.plot(x_interval, fitting.best_fit, '--', label='fitting')
     plt.xlim(0,5)
     plt.ylim(0,0.1)
     plt.legend()
     plt.show()
-    # for name, pars in output1.params.items():
-    #     print("  %s: value=%f +/- %f " % (name, pars.value, pars.stderr))
-    print(output1.fit_report())
+
+    #print(fitting.fit_report())
+    """return amplitude(represents the overall intensity (or area of) a peak or function)
+       return sigma parameter that gives a characteristic width."""
+    for name, pars in fitting.params.items():
+        print(" %s: value=%s +/- %s " % (name, pars.value, pars.stderr))
