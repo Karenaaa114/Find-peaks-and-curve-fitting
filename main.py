@@ -9,6 +9,9 @@ from scipy.optimize import curve_fit
 from lmfit import models
 from lmfit.models import GaussianModel, LorentzianModel, PseudoVoigtModel, ExponentialModel
 
+from scipy import sparse
+from scipy.sparse.linalg import spsolve
+
 
 def read_data(filename):
     """Return the data from csv file and transpose the data to read by row.
@@ -248,3 +251,26 @@ for i in range(intensity.shape[0]):
     plt.ylabel("intensity")
     plt.legend()
     plt.show()
+
+    """define a baseline to make the distribution flat on"""
+    def baseline_als(y, lam, p, niter=10):
+        """Define a baseline to make the distribution flat on.
+
+        Args:
+            y (_type_): Matrix with spectra in rows
+            lam (_type_): 2nd derivative constraint (smoothness parameter)
+            p (_type_): Weighting of positive residuals
+            niter (int, optional): Maximum number of iterations. Defaults to 10.
+
+        Returns:
+            _type_: _description_
+        """
+        L = len(y)
+        matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
+        w = np.ones(L)  #set all numbers in array to 1
+        for i in range(niter):
+            W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
+            Z = W + lam * matrix.dot(matrix.transpose())
+            z = spsolve(Z, w*y)
+            w = p * (y > z) + (1-p) * (y < z)
+        return z
