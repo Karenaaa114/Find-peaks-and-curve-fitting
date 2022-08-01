@@ -253,24 +253,62 @@ for i in range(intensity.shape[0]):
     plt.show()
 
     """define a baseline to make the distribution flat on"""
-    def baseline_als(y, lam, p, niter=10):
-        """Define a baseline to make the distribution flat on.
+def baseline_als(y, lam, p, niter=10):
+    """Define a baseline to make the distribution flat on.
 
-        Args:
-            y (_type_): Matrix with spectra in rows
-            lam (_type_): 2nd derivative constraint (smoothness parameter)
-            p (_type_): Weighting of positive residuals
-            niter (int, optional): Maximum number of iterations. Defaults to 10.
+    Args:
+        y (_type_): Matrix with spectra in rows
+        lam (_type_): 2nd derivative constraint (smoothness parameter)
+        p (_type_): Weighting of positive residuals
+        niter (int, optional): Maximum number of iterations. Defaults to 10.
 
-        Returns:
-            _type_: _description_
-        """
-        L = len(y)
-        matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
-        w = np.ones(L)  #set all numbers in array to 1
-        for i in range(niter):
-            W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
-            Z = W + lam * matrix.dot(matrix.transpose())
-            z = spsolve(Z, w*y)
-            w = p * (y > z) + (1-p) * (y < z)
-        return z
+    Returns:
+        _type_: _description_
+    """
+    L = len(y)
+    matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
+    w = np.ones(L)  #set all numbers in array to 1
+    for i in range(niter):
+        W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
+        Z = W + lam * matrix.dot(matrix.transpose())
+        z = spsolve(Z, w*y)
+        w = p * (y > z) + (1-p) * (y < z)
+    return z
+
+
+"""gaussian fitting method 3 (used in skewing distribution)"""
+#[1,3.5] interval use background subtraction
+for i in range(intensity.shape[0]):
+    interval_index = get_index_in_interval(two_theta, [1,2.5])
+    x_interval = two_theta[interval_index]
+    y_interval = intensity[i][interval_index]
+    y_base = y_interval - min(y_interval)
+
+    model = GaussianModel()
+    # model = ExponentialModel()
+    # model = LorentzianModel()
+    # model = PseudoVoigtModel()
+    pars=model.guess(y_interval, x=x_interval)
+    # pars = model.make_params()
+    output = model.fit(y_base, pars, x=x_interval)
+    plt.plot(x_interval, y_interval, '-', label='original data')
+    # plt.plot(x, y_base, label='data staring at 0')
+    # plt.plot(x, output.best_fit, '--', label='fit')
+    # plt.title('Gaussian fitting for dataset %d' %i)
+    # plt.title('Lorentzian fitting for dataset %d' %i)
+    plt.title('Voigt fitting for dataset %d' %i)
+
+    baseline = baseline_als(y_interval,100000,0.01)
+    baseline_subtracted = y_interval - baseline
+    plt.plot(x_interval, baseline,':',label='baseline')
+    plt.plot(x_interval, baseline_subtracted,label='after background subtraction')
+    pars1=model.guess(baseline_subtracted, x=x_interval)
+    output1 = model.fit(baseline_subtracted, pars, x=x_interval)
+    plt.plot(x_interval, output1.best_fit, '--', label='fitting')
+    plt.xlim(0,5)
+    plt.ylim(0,0.1)
+    plt.legend()
+    plt.show()
+    # for name, pars in output1.params.items():
+    #     print("  %s: value=%f +/- %f " % (name, pars.value, pars.stderr))
+    print(output1.fit_report())
