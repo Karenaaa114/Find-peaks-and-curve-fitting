@@ -344,3 +344,22 @@ def all_to_csv_file(col1,col2,col3,col4,col5,col6,name):
 
 time = list(range(0,170,10))
 all_to_csv_file(time,amplitude,center,sigma,fwhm,height,'all params')
+
+
+"""export only one parameter(like fwhm) to csv file and plot the variation in it"""
+def to_csv_file(col1,col2,name):
+    data_file = pd.DataFrame({'time':col1,name:col2})
+    data_file.to_csv(name+'.csv',index=0,sep=',',header=None)
+
+time = list(range(0,170,10))
+fwhm = fwhm
+to_csv_file(time,fwhm,'fwhm')
+
+# time = list(range(30,170,10))
+# fwhm = fwhm[3:]
+plt.plot(time, fwhm)
+plt.scatter(time, fwhm)
+plt.title("variation in fwhm")
+plt.xlabel("time")
+plt.ylabel("fwhm")
+plt.show()
