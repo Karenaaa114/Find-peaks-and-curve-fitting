@@ -278,6 +278,13 @@ def baseline_als(y, lam, p, niter=10):
 
 """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
+
+amplitude = []
+center = []
+sigma = []
+fwhm = []
+height = []
+
 for i in range(intensity.shape[0]):
     interval_index = get_index_in_interval(two_theta, [1,2.5])
     x_interval = two_theta[interval_index]
@@ -315,3 +322,16 @@ for i in range(intensity.shape[0]):
        return sigma parameter that gives a characteristic width."""
     for name, pars in fitting.params.items():
         print(" %s: value=%s +/- %s " % (name, pars.value, pars.stderr))
+    
+    #only print one params
+    amplitude_value = fitting.params['amplitude'].value
+    center_value = fitting.params['center'].value
+    sigma_value = fitting.params['sigma'].value
+    fwhm_value = fitting.params['fwhm'].value
+    height_value = fitting.params['height'].value
+
+    amplitude.append(amplitude_value)
+    center.append(center_value)
+    sigma.append(sigma_value)
+    fwhm.append(fwhm_value)
+    height.append(height_value)
