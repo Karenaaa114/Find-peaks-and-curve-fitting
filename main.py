@@ -1,6 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 import math
 
@@ -335,3 +336,11 @@ for i in range(intensity.shape[0]):
     sigma.append(sigma_value)
     fwhm.append(fwhm_value)
     height.append(height_value)
+
+"""export amplitude,center,sigma,fwhm and height into csv file"""
+def all_to_csv_file(col1,col2,col3,col4,col5,col6,name):
+    data_file = pd.DataFrame({'time':col1,'amplitude':col2,'center':col3,'sigma':col4,'fwhm':col5,'height':col6})
+    data_file.to_csv(name+'.csv',index=0,sep=',')
+
+time = list(range(0,170,10))
+all_to_csv_file(time,amplitude,center,sigma,fwhm,height,'all params')
