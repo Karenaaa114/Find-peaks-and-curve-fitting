@@ -363,3 +363,17 @@ plt.title("variation in fwhm")
 plt.xlabel("time")
 plt.ylabel("fwhm")
 plt.show()
+
+
+
+"""plot variation in height"""
+# time = list(range(0,170,10))
+# height = height
+time = list(range(30,170,10))
+height = height[3:]
+plt.plot(time, height)
+plt.scatter(time, height)
+plt.title("variation in height")
+plt.xlabel("time")
+plt.ylabel("height")
+plt.show()
