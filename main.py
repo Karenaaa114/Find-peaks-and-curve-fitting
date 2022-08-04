@@ -241,23 +241,23 @@ for i in range(intensity.shape[0]):
 
 
 """(Gaussian) fitting method 2 (fitting display well for normal gaussian distribution"""
-for i in range(intensity.shape[0]):
-    interval_index = get_index_in_interval(two_theta, [6,7])
-    x_interval = two_theta[interval_index]
-    y_interval = intensity[i][interval_index]
-    y_base = y_interval - min(y_interval)
+def fitting_method_2(two_theta,intensity,x_interval):
+    interval_index = get_index_in_interval(two_theta, x_interval)
+    x_interval_value = two_theta[interval_index]
+    y_interval_value = intensity[interval_index]
+    y_base = y_interval_value - min(y_interval_value)
 
     model = GaussianModel()
     # model = ExponentialModel()
     # model = LorentzianModel()
     # model = PseudoVoigtModel()
     # model = ExponentialModel()
-    pars=model.guess(y_interval,x=x_interval)
+    pars=model.guess(y_interval_value,x=x_interval_value)
     # pars = model.make_params()
-    output = model.fit(y_base, pars, x=x_interval)
-    plt.plot(x_interval, y_interval, '-', label='original data')
-    plt.plot(x_interval, y_base, label='data staring at 0')
-    plt.plot(x_interval, output.best_fit, '--', label='fitting')
+    output = model.fit(y_base, pars, x=x_interval_value)
+    plt.plot(x_interval_value, y_interval_value, '-', label='original data')
+    plt.plot(x_interval_value, y_base, label='data staring at 0')
+    plt.plot(x_interval_value, output.best_fit, '--', label='fitting')
     plt.title('Gaussian fitting for dataset %d' %i)
     # plt.title('Lorentzian fitting for dataset %d' %i)
     # plt.title('Voigt fitting for dataset %d' %i)
@@ -265,6 +265,11 @@ for i in range(intensity.shape[0]):
     plt.ylabel("intensity")
     plt.legend()
     plt.show()
+
+for i in range(intensity.shape[0]):
+    fitting_method_2(two_theta,intensity[i],[6,7])
+
+
 
     """define a baseline to make the distribution flat on"""
 def baseline_als(y, lam, p, niter=10):
@@ -293,17 +298,11 @@ def baseline_als(y, lam, p, niter=10):
 """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
 
-amplitude = []
-center = []
-sigma = []
-fwhm = []
-height = []
 
-for i in range(intensity.shape[0]):
+def fitting_method_3(two_theta,intensity,x_interval):
     interval_index = get_index_in_interval(two_theta, [1,2.5])
     x_interval = two_theta[interval_index]
     y_interval = intensity[i][interval_index]
-    y_base = y_interval - min(y_interval)
 
     model = GaussianModel()
     # model = ExponentialModel()
