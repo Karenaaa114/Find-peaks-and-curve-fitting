@@ -300,35 +300,41 @@ def baseline_als(y, lam, p, niter=10):
 
 
 def fitting_method_3(two_theta,intensity,x_interval):
-    interval_index = get_index_in_interval(two_theta, [1,2.5])
-    x_interval = two_theta[interval_index]
-    y_interval = intensity[i][interval_index]
+    interval_index = get_index_in_interval(two_theta, x_interval)
+    x_interval_value = two_theta[interval_index]
+    y_interval_value = intensity[interval_index]
 
     model = GaussianModel()
     # model = ExponentialModel()
     # model = LorentzianModel()
     # model = PseudoVoigtModel()
-    pars=model.guess(y_interval, x=x_interval)
+    pars=model.guess(y_interval_value, x=x_interval_value)
     # pars = model.make_params()
-    output = model.fit(y_base, pars, x=x_interval)
-    plt.plot(x_interval, y_interval, '-', label='original data')
+    plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.plot(x, y_base, label='data staring at 0')
     # plt.plot(x, output.best_fit, '--', label='fit')
     plt.title('Gaussian fitting for dataset %d' %i)
     # plt.title('Lorentzian fitting for dataset %d' %i)
     # plt.title('Voigt fitting for dataset %d' %i)
 
-    baseline = baseline_als(y_interval,100000,0.01)
-    baseline_subtracted = y_interval - baseline
-    plt.plot(x_interval, baseline,':',label='baseline')
-    plt.plot(x_interval, baseline_subtracted,label='after background subtraction')
-    pars1=model.guess(baseline_subtracted, x=x_interval)
-    fitting = model.fit(baseline_subtracted, pars, x=x_interval)
-    plt.plot(x_interval, fitting.best_fit, '--', label='fitting')
+    baseline = baseline_als(y_interval_value,100000,0.01)
+    baseline_subtracted = y_interval_value - baseline
+    plt.plot(x_interval_value, baseline,':',label='baseline')
+    plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
+    # pars1=model.guess(baseline_subtracted, x=x_interval_value)
+    fitting = model.fit(baseline_subtracted, pars, x=x_interval_value)
+    plt.plot(x_interval_value, fitting.best_fit, '--', label='fitting')
     plt.xlim(0,5)
     plt.ylim(0,0.1)
     plt.legend()
     plt.show()
+    for name, pars in fitting.params.items():
+        print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+
+for i in range(intensity.shape[0]):
+    fitting_method_3(two_theta,intensity[i],[1,2])
+
+    
 
     #print(fitting.fit_report())
     """return amplitude(represents the overall intensity (or area of) a peak or function)
