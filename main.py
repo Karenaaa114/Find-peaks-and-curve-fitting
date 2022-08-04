@@ -351,6 +351,51 @@ def fitting_method_4(two_theta,intensity,x_interval):
     return fitting
 
 
+"""print all pars value[1,5]"""
+def print_pars_value(two_theta,intensity,x_interval):
+    fitting = fitting_method_4(two_theta,intensity,x_interval)
+    pars_value = []
+    for name, pars in fitting.params.items():
+        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+        pars = pars.value
+        pars_value.append(pars)
+    return pars_value
+
+for i in range(intensity.shape[0]):
+    print_pars_value(two_theta,intensity[i],[6,7])
+
+
+"""print all pars value[5*16]"""
+"""[16*5]-[1,5]-[5,1]-[5*16]"""
+"""store the pars in [5*16]list format"""
+def print_pars_value(two_theta,intensity,x_interval):
+    fitting = fitting_method_4(two_theta,intensity,x_interval)
+    pars_value = []
+    for name, pars in fitting.params.items():
+        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+        pars = pars.value
+        pars_value.append(pars)
+    return pars_value
+
+def print_all_pars_values(two_theta,intensity,x_interval):
+    all_data = []
+    for i in range(intensity.shape[0]):
+        data = print_pars_value(two_theta,intensity[i],x_interval)
+        all_data.append(data)
+    return all_data
+
+all_pars_values = print_all_pars_values(two_theta,intensity,[1.2,2.5])
+all_pars_values_transposed = np.array(all_pars_values)
+all_pars_values_transposed = all_pars_values_transposed.astype(np.float32)
+all_pars_values_transposed = all_pars_values_transposed.transpose()
+print(all_pars_values_transposed)
+
+
+
+
+
+
+
 
 
 
