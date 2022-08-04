@@ -227,6 +227,19 @@ for i in range(len(popt_gauss)):
     print( "area = %0.7f" % np.trapz(Gaussian(two_theta, *popt_gauss[i])))
 
 
+"""select data from interval"""
+def selected_data(two_theta,intensity,x_interval):
+    interval_index = get_index_in_interval(two_theta, x_interval)
+    x_interval_value = two_theta[interval_index]
+    y_interval_value = intensity[interval_index]
+    return x_interval_value, y_interval_value
+
+for i in range(intensity.shape[0]):
+    select_data = selected_data(two_theta,intensity[i],[6,7])
+    print(select_data)
+
+
+
 """(Gaussian) fitting method 2 (fitting display well for normal gaussian distribution"""
 for i in range(intensity.shape[0]):
     interval_index = get_index_in_interval(two_theta, [6,7])
