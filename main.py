@@ -527,14 +527,17 @@ def to_csv_file(col1,col2,name):
     data_file = pd.DataFrame({'time':col1,name:col2})
     data_file.to_csv(name+'.csv',index=0,sep=',',header=None)
 
-time = list(range(0,170,10))
-fwhm = fwhm
-to_csv_file(time,fwhm,'fwhm')
 
-# time = list(range(30,170,10))
-# fwhm = fwhm[3:]
+
+"""plot variation in fwhm"""
+# time = list(range(0,170,10))
+# fwhm = all_pars_values_transposed[3]
+time = list(range(30,170,10))
+fwhm = all_pars_values_transposed[3][3:] #ignore the first three datasets because there are no peaks.
+# to_csv_file(time,fwhm,'fwhm')
 plt.plot(time, fwhm)
 plt.scatter(time, fwhm)
+plt.errorbar(time, fwhm, yerr=all_error_values_transposed[3][3:])
 plt.title("variation in fwhm")
 plt.xlabel("time")
 plt.ylabel("fwhm")
@@ -544,11 +547,12 @@ plt.show()
 
 """plot variation in height"""
 # time = list(range(0,170,10))
-# height = height
+# height = all_pars_values_transposed[4]
 time = list(range(30,170,10))
-height = height[3:]
+height = all_pars_values_transposed[4][3:]
 plt.plot(time, height)
 plt.scatter(time, height)
+plt.errorbar(time, height, yerr=all_error_values_transposed[4][3:])
 plt.title("variation in height")
 plt.xlabel("time")
 plt.ylabel("height")
