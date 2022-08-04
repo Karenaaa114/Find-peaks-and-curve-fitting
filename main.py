@@ -334,7 +334,28 @@ def fitting_method_3(two_theta,intensity,x_interval):
 for i in range(intensity.shape[0]):
     fitting_method_3(two_theta,intensity[i],[1,2])
 
-    
+
+def fitting_method_4(two_theta,intensity,x_interval):
+    interval_index = get_index_in_interval(two_theta, x_interval)
+    x_interval_value = two_theta[interval_index]
+    y_interval_value = intensity[interval_index]
+    model = GaussianModel()
+    # model = ExponentialModel()
+    # model = LorentzianModel()
+    # model = PseudoVoigtModel()
+    pars=model.guess(y_interval_value, x=x_interval_value)
+    # pars = model.make_params()
+    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline_subtracted = y_interval_value - baseline
+    fitting = model.fit(baseline_subtracted, pars, x=x_interval_value)
+    return fitting
+
+
+
+
+
+
+
 
     #print(fitting.fit_report())
     """return amplitude(represents the overall intensity (or area of) a peak or function)
