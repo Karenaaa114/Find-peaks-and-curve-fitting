@@ -472,6 +472,18 @@ print(all_par_error_transposed)
 
 
 
+"""export amplitude,center,sigma,fwhm, height and error into csv file"""
+rows = all_par_error_transposed
+np.savetxt("par_error.csv", 
+           rows,
+           delimiter =", ", 
+           fmt ='% s')
+
+
+
+
+
+
 
 
 
