@@ -440,6 +440,38 @@ print(all_error_values_transposed)
 
 
 
+"""store the pars and error in [10*16]list format"""
+"""easy to export to csv file"""
+def print_par_error(two_theta,intensity,x_interval):
+    fitting = fitting_method_4(two_theta,intensity,x_interval)
+    
+    par_err = []
+    for name, pars in fitting.params.items():
+        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+        error = pars.stderr
+        pars = pars.value
+        par_err.append(pars)
+        par_err.append(error)
+    return par_err
+
+def print_all_par_error(two_theta,intensity,x_interval):
+    all_data = []
+    for i in range(intensity.shape[0]):
+        data = print_par_error(two_theta,intensity[i],x_interval)
+        all_data.append(data)
+    return all_data
+
+all_par_error = print_all_par_error(two_theta,intensity,[1.2,2.5])
+all_par_error_transposed = np.array(all_par_error)
+all_par_error_transposed = all_par_error_transposed.astype(np.float32).transpose()
+all_par_error_transposed =  np.where(np.isnan(all_par_error_transposed), 0, all_par_error_transposed)
+print(all_par_error_transposed)
+
+
+
+
+
+
 
 
 
