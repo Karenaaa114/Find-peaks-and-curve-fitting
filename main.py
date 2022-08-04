@@ -393,6 +393,54 @@ print(all_pars_values_transposed)
 
 
 
+"""print all error value[1*5]"""
+def print_error_value(two_theta,intensity,x_interval):
+    fitting = fitting_method_4(two_theta,intensity,x_interval)
+    error_value = []
+    for name, pars in fitting.params.items():
+        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+        error = pars.stderr
+        error_value.append(error)
+    return error_value
+
+for i in range(intensity.shape[0]):
+    print_error_value(two_theta,intensity[i],[1.2,2.5])
+
+
+
+"""print all error value[5*16]"""
+"""[16*5]-[1,5]-[5,1]-[5*16]"""
+"""store the error in [5*16]list format"""
+def print_error_value(two_theta,intensity,x_interval):
+    fitting = fitting_method_4(two_theta,intensity,x_interval)
+    error_value = []
+    for name, pars in fitting.params.items():
+        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+        error = pars.stderr
+        error_value.append(error)
+    return error_value
+
+    # return 0 if not_float(error_value) else error_value
+    # 0 if value is None else value
+
+def print_all_error_values(two_theta,intensity,x_interval):
+    all_data = []
+    for i in range(intensity.shape[0]):
+        data = print_error_value(two_theta,intensity[i],x_interval)
+        all_data.append(data)
+    return all_data
+
+all_error_values = print_all_error_values(two_theta,intensity,[1.2,2.5])
+all_error_values_transposed = np.array(all_error_values)
+all_error_values_transposed = all_error_values_transposed.astype(np.float32).transpose()
+all_error_values_transposed =  np.where(np.isnan(all_error_values_transposed), 0, all_error_values_transposed)
+print(all_error_values_transposed)
+
+
+
+
+
+
 
 
 
