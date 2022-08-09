@@ -472,64 +472,46 @@ def baseline_als(y, lam, p, niter=10):
 # print(all_par_error_transposed)
 
 
+# """export amplitude,center,sigma,fwhm, height and error into csv file"""
+# rows = all_par_error_transposed
+# np.savetxt("par_error.csv", 
+#            rows,
+#            delimiter =", ", 
+#            fmt ='% s')
 
 
-
-
-"""export amplitude,center,sigma,fwhm, height and error into csv file"""
-rows = all_par_error_transposed
-np.savetxt("par_error.csv", 
-           rows,
-           delimiter =", ", 
-           fmt ='% s')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #print(fitting.fit_report())
-    """return amplitude(represents the overall intensity (or area of) a peak or function)
-       return sigma parameter that gives a characteristic width."""
-    for name, pars in fitting.params.items():
-        print(" %s: value=%s +/- %s " % (name, pars.value, pars.stderr))
+#     #print(fitting.fit_report())
+#     """return amplitude(represents the overall intensity (or area of) a peak or function)
+#        return sigma parameter that gives a characteristic width."""
+#     for name, pars in fitting.params.items():
+#         print(" %s: value=%s +/- %s " % (name, pars.value, pars.stderr))
     
-    #only print one params
-    amplitude_value = fitting.params['amplitude'].value
-    center_value = fitting.params['center'].value
-    sigma_value = fitting.params['sigma'].value
-    fwhm_value = fitting.params['fwhm'].value
-    height_value = fitting.params['height'].value
+#     #only print one params
+#     amplitude_value = fitting.params['amplitude'].value
+#     center_value = fitting.params['center'].value
+#     sigma_value = fitting.params['sigma'].value
+#     fwhm_value = fitting.params['fwhm'].value
+#     height_value = fitting.params['height'].value
 
-    amplitude.append(amplitude_value)
-    center.append(center_value)
-    sigma.append(sigma_value)
-    fwhm.append(fwhm_value)
-    height.append(height_value)
+#     amplitude.append(amplitude_value)
+#     center.append(center_value)
+#     sigma.append(sigma_value)
+#     fwhm.append(fwhm_value)
+#     height.append(height_value)
 
-"""export amplitude,center,sigma,fwhm and height into csv file"""
-def all_to_csv_file(col1,col2,col3,col4,col5,col6,name):
-    data_file = pd.DataFrame({'time':col1,'amplitude':col2,'center':col3,'sigma':col4,'fwhm':col5,'height':col6})
-    data_file.to_csv(name+'.csv',index=0,sep=',')
+# """export amplitude,center,sigma,fwhm and height into csv file"""
+# def all_to_csv_file(col1,col2,col3,col4,col5,col6,name):
+#     data_file = pd.DataFrame({'time':col1,'amplitude':col2,'center':col3,'sigma':col4,'fwhm':col5,'height':col6})
+#     data_file.to_csv(name+'.csv',index=0,sep=',')
 
-time = list(range(0,170,10))
-all_to_csv_file(time,amplitude,center,sigma,fwhm,height,'all params')
+# time = list(range(0,170,10))
+# all_to_csv_file(time,amplitude,center,sigma,fwhm,height,'all params')
 
 
-"""export only one parameter(like fwhm) to csv file and plot the variation in it"""
-def to_csv_file(col1,col2,name):
-    data_file = pd.DataFrame({'time':col1,name:col2})
-    data_file.to_csv(name+'.csv',index=0,sep=',',header=None)
+# """export only one parameter(like fwhm) to csv file and plot the variation in it"""
+# def to_csv_file(col1,col2,name):
+#     data_file = pd.DataFrame({'time':col1,name:col2})
+#     data_file.to_csv(name+'.csv',index=0,sep=',',header=None)
 
 
 
