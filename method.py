@@ -227,6 +227,20 @@ def plot_data_log10(two_theta, intensity):
 #     print( "area = %0.7f" % np.trapz(Gaussian(two_theta, *popt_gauss[i])))
 
 
+def get_index_in_interval(datax,x_interval):
+    """Get index of x interval.
+
+    Args:
+        datax (1-D array)
+        x_interval (1-D list)
+
+    Returns:
+        index: index of x interval
+    """
+    return np.where((datax>=x_interval[0]) & (datax<x_interval[1]))[0]
+
+
+
 """select data from interval"""
 def selected_data(two_theta,intensity,x_interval):
     interval_index = get_index_in_interval(two_theta, x_interval)
