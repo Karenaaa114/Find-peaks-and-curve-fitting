@@ -301,6 +301,32 @@ def baseline_als(y, lam, p, niter=10):
     return z
 
 
+
+
+# def gaussian_fitting_curve(two_theta,intensity,x_interval,gauss1,gauss2):
+def gaussian_fitting_curve(two_theta,intensity,x_interval,set_pars):
+    x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
+    mod = GaussianModel(prefix='g1_')
+    pars = mod.guess(y_interval_value, x=x_interval_value)
+    pars['g1_center'].set(value=set_pars[0][0])
+    pars['g1_sigma'].set(value=set_pars[0][1])
+    pars['g1_amplitude'].set(value=set_pars[0][2])
+    for i in range(1,len(set_pars)):
+        mod_gauss = GaussianModel(prefix='g%d_' % (i+1))
+        pars.update(mod_gauss.make_params())
+        mod = mod+mod_gauss
+        pars['g%d_center'%(i+1)].set(value=set_pars[i][0])
+        pars['g%d_sigma'%(i+1)].set(value=set_pars[i][1])
+        pars['g%d_amplitude'%(i+1)].set(value=set_pars[i][2])
+        # mod = mod + GaussianModel(prefix='g%d_' % (i+1))
+        fitting = mod.fit(y_interval_value, pars, x=x_interval_value)
+    return fitting.best_fit, fitting.params.items()
+
+
+
+
+
+
 # """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
 
