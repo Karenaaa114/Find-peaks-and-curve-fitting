@@ -242,50 +242,42 @@ def get_index_in_interval(datax,x_interval):
 
 
 """select data from interval"""
-def selected_data(two_theta,intensity,x_interval):
+def interval_data(two_theta,intensity,x_interval):
     interval_index = get_index_in_interval(two_theta, x_interval)
-    x_interval_value = two_theta[interval_index]
-    y_interval_value = intensity[interval_index]
-    return x_interval_value, y_interval_value
-
-for i in range(intensity.shape[0]):
-    select_data = selected_data(two_theta,intensity[i],[6,7])
-    print(select_data)
+    return two_theta[interval_index], intensity[interval_index]
 
 
 
-"""(Gaussian) fitting method 2 (fitting display well for normal gaussian distribution"""
-def fitting_method_2(two_theta,intensity,x_interval):
-    interval_index = get_index_in_interval(two_theta, x_interval)
-    x_interval_value = two_theta[interval_index]
-    y_interval_value = intensity[interval_index]
-    y_base = y_interval_value - min(y_interval_value)
 
-    model = GaussianModel()
-    # model = ExponentialModel()
-    # model = LorentzianModel()
-    # model = PseudoVoigtModel()
-    # model = ExponentialModel()
-    pars=model.guess(y_interval_value,x=x_interval_value)
-    # pars = model.make_params()
-    output = model.fit(y_base, pars, x=x_interval_value)
-    plt.plot(x_interval_value, y_interval_value, '-', label='original data')
-    plt.plot(x_interval_value, y_base, label='data staring at 0')
-    plt.plot(x_interval_value, output.best_fit, '--', label='fitting')
-    plt.title('Gaussian fitting for dataset %d' %i)
-    # plt.title('Lorentzian fitting for dataset %d' %i)
-    # plt.title('Voigt fitting for dataset %d' %i)
-    plt.xlabel(r'$2\theta$')
-    plt.ylabel("intensity")
-    plt.legend()
-    plt.show()
+# """(Gaussian) fitting method 2 (fitting display well for normal gaussian distribution"""
+# def fitting_method_2(two_theta,intensity,x_interval):
+#     interval_index = get_index_in_interval(two_theta, x_interval)
+#     x_interval_value = two_theta[interval_index]
+#     y_interval_value = intensity[interval_index]
+#     y_base = y_interval_value - min(y_interval_value)
 
-for i in range(intensity.shape[0]):
-    fitting_method_2(two_theta,intensity[i],[6,7])
+#     model = GaussianModel()
+#     # model = ExponentialModel()
+#     # model = LorentzianModel()
+#     # model = PseudoVoigtModel()
+#     # model = ExponentialModel()
+#     pars=model.guess(y_interval_value,x=x_interval_value)
+#     # pars = model.make_params()
+#     output = model.fit(y_base, pars, x=x_interval_value)
+#     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
+#     plt.plot(x_interval_value, y_base, label='data staring at 0')
+#     plt.plot(x_interval_value, output.best_fit, '--', label='fitting')
+#     plt.title('Gaussian fitting for dataset %d' %i)
+#     # plt.title('Lorentzian fitting for dataset %d' %i)
+#     # plt.title('Voigt fitting for dataset %d' %i)
+#     plt.xlabel(r'$2\theta$')
+#     plt.ylabel("intensity")
+#     plt.legend()
+#     plt.show()
 
 
 
-    """define a baseline to make the distribution flat on"""
+
 def baseline_als(y, lam, p, niter=10):
     """Define a baseline to make the distribution flat on.
 
@@ -309,177 +301,175 @@ def baseline_als(y, lam, p, niter=10):
     return z
 
 
-"""gaussian fitting method 3 (used in skewing distribution)"""
+# """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
 
 
-def fitting_method_3(two_theta,intensity,x_interval):
-    interval_index = get_index_in_interval(two_theta, x_interval)
-    x_interval_value = two_theta[interval_index]
-    y_interval_value = intensity[interval_index]
+# def fitting_method_3(two_theta,intensity,x_interval):
+#     interval_index = get_index_in_interval(two_theta, x_interval)
+#     x_interval_value = two_theta[interval_index]
+#     y_interval_value = intensity[interval_index]
 
-    model = GaussianModel()
-    # model = ExponentialModel()
-    # model = LorentzianModel()
-    # model = PseudoVoigtModel()
-    pars=model.guess(y_interval_value, x=x_interval_value)
-    # pars = model.make_params()
-    plt.plot(x_interval_value, y_interval_value, '-', label='original data')
-    # plt.plot(x, y_base, label='data staring at 0')
-    # plt.plot(x, output.best_fit, '--', label='fit')
-    plt.title('Gaussian fitting for dataset %d' %i)
-    # plt.title('Lorentzian fitting for dataset %d' %i)
-    # plt.title('Voigt fitting for dataset %d' %i)
+#     model = GaussianModel()
+#     # model = ExponentialModel()
+#     # model = LorentzianModel()
+#     # model = PseudoVoigtModel()
+#     pars=model.guess(y_interval_value, x=x_interval_value)
+#     # pars = model.make_params()
+#     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
+#     # plt.plot(x, y_base, label='data staring at 0')
+#     # plt.plot(x, output.best_fit, '--', label='fit')
+#     plt.title('Gaussian fitting for dataset %d' %i)
+#     # plt.title('Lorentzian fitting for dataset %d' %i)
+#     # plt.title('Voigt fitting for dataset %d' %i)
 
-    baseline = baseline_als(y_interval_value,100000,0.01)
-    baseline_subtracted = y_interval_value - baseline
-    plt.plot(x_interval_value, baseline,':',label='baseline')
-    plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
-    # pars1=model.guess(baseline_subtracted, x=x_interval_value)
-    fitting = model.fit(baseline_subtracted, pars, x=x_interval_value)
-    plt.plot(x_interval_value, fitting.best_fit, '--', label='fitting')
-    plt.xlim(0,5)
-    plt.ylim(0,0.1)
-    plt.legend()
-    plt.show()
-    for name, pars in fitting.params.items():
-        print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
-
-for i in range(intensity.shape[0]):
-    fitting_method_3(two_theta,intensity[i],[1,2])
+#     baseline = baseline_als(y_interval_value,100000,0.01)
+#     baseline_subtracted = y_interval_value - baseline
+#     plt.plot(x_interval_value, baseline,':',label='baseline')
+#     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
+#     # pars1=model.guess(baseline_subtracted, x=x_interval_value)
+#     fitting = model.fit(baseline_subtracted, pars, x=x_interval_value)
+#     plt.plot(x_interval_value, fitting.best_fit, '--', label='fitting')
+#     plt.xlim(0,5)
+#     plt.ylim(0,0.1)
+#     plt.legend()
+#     plt.show()
+#     for name, pars in fitting.params.items():
+#         print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
 
 
-def fitting_method_4(two_theta,intensity,x_interval):
-    interval_index = get_index_in_interval(two_theta, x_interval)
-    x_interval_value = two_theta[interval_index]
-    y_interval_value = intensity[interval_index]
-    model = GaussianModel()
-    # model = ExponentialModel()
-    # model = LorentzianModel()
-    # model = PseudoVoigtModel()
-    pars=model.guess(y_interval_value, x=x_interval_value)
-    # pars = model.make_params()
-    baseline = baseline_als(y_interval_value,10000,0.01)
-    baseline_subtracted = y_interval_value - baseline
-    fitting = model.fit(baseline_subtracted, pars, x=x_interval_value)
-    return fitting
+
+# def fitting_method_4(two_theta,intensity,x_interval):
+#     interval_index = get_index_in_interval(two_theta, x_interval)
+#     x_interval_value = two_theta[interval_index]
+#     y_interval_value = intensity[interval_index]
+#     model = GaussianModel()
+#     # model = ExponentialModel()
+#     # model = LorentzianModel()
+#     # model = PseudoVoigtModel()
+#     pars=model.guess(y_interval_value, x=x_interval_value)
+#     # pars = model.make_params()
+#     baseline = baseline_als(y_interval_value,10000,0.01)
+#     baseline_subtracted = y_interval_value - baseline
+#     fitting = model.fit(baseline_subtracted, pars, x=x_interval_value)
+#     return fitting
 
 
-"""print all pars value[1,5]"""
-def print_pars_value(two_theta,intensity,x_interval):
-    fitting = fitting_method_4(two_theta,intensity,x_interval)
-    pars_value = []
-    for name, pars in fitting.params.items():
-        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
-        pars = pars.value
-        pars_value.append(pars)
-    return pars_value
+# """print all pars value[1,5]"""
+# def print_pars_value(two_theta,intensity,x_interval):
+#     fitting = fitting_method_4(two_theta,intensity,x_interval)
+#     pars_value = []
+#     for name, pars in fitting.params.items():
+#         # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+#         pars = pars.value
+#         pars_value.append(pars)
+#     return pars_value
 
-for i in range(intensity.shape[0]):
-    print_pars_value(two_theta,intensity[i],[6,7])
+# for i in range(intensity.shape[0]):
+#     print_pars_value(two_theta,intensity[i],[6,7])
 
 
-"""print all pars value[5*16]"""
-"""[16*5]-[1,5]-[5,1]-[5*16]"""
-"""store the pars in [5*16]list format"""
-def print_pars_value(two_theta,intensity,x_interval):
-    fitting = fitting_method_4(two_theta,intensity,x_interval)
-    pars_value = []
-    for name, pars in fitting.params.items():
-        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
-        pars = pars.value
-        pars_value.append(pars)
-    return pars_value
+# """print all pars value[5*16]"""
+# """[16*5]-[1,5]-[5,1]-[5*16]"""
+# """store the pars in [5*16]list format"""
+# def print_pars_value(two_theta,intensity,x_interval):
+#     fitting = fitting_method_4(two_theta,intensity,x_interval)
+#     pars_value = []
+#     for name, pars in fitting.params.items():
+#         # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+#         pars = pars.value
+#         pars_value.append(pars)
+#     return pars_value
 
-def print_all_pars_values(two_theta,intensity,x_interval):
-    all_data = []
-    for i in range(intensity.shape[0]):
-        data = print_pars_value(two_theta,intensity[i],x_interval)
-        all_data.append(data)
-    return all_data
+# def print_all_pars_values(two_theta,intensity,x_interval):
+#     all_data = []
+#     for i in range(intensity.shape[0]):
+#         data = print_pars_value(two_theta,intensity[i],x_interval)
+#         all_data.append(data)
+#     return all_data
 
-all_pars_values = print_all_pars_values(two_theta,intensity,[1.2,2.5])
-all_pars_values_transposed = np.array(all_pars_values)
-all_pars_values_transposed = all_pars_values_transposed.astype(np.float32)
-all_pars_values_transposed = all_pars_values_transposed.transpose()
-print(all_pars_values_transposed)
+# all_pars_values = print_all_pars_values(two_theta,intensity,[1.2,2.5])
+# all_pars_values_transposed = np.array(all_pars_values)
+# all_pars_values_transposed = all_pars_values_transposed.astype(np.float32)
+# all_pars_values_transposed = all_pars_values_transposed.transpose()
+# print(all_pars_values_transposed)
 
 
 
 
-"""print all error value[1*5]"""
-def print_error_value(two_theta,intensity,x_interval):
-    fitting = fitting_method_4(two_theta,intensity,x_interval)
-    error_value = []
-    for name, pars in fitting.params.items():
-        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
-        error = pars.stderr
-        error_value.append(error)
-    return error_value
+# """print all error value[1*5]"""
+# def print_error_value(two_theta,intensity,x_interval):
+#     fitting = fitting_method_4(two_theta,intensity,x_interval)
+#     error_value = []
+#     for name, pars in fitting.params.items():
+#         # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+#         error = pars.stderr
+#         error_value.append(error)
+#     return error_value
 
-for i in range(intensity.shape[0]):
-    print_error_value(two_theta,intensity[i],[1.2,2.5])
+# for i in range(intensity.shape[0]):
+#     print_error_value(two_theta,intensity[i],[1.2,2.5])
 
 
 
-"""print all error value[5*16]"""
-"""[16*5]-[1,5]-[5,1]-[5*16]"""
-"""store the error in [5*16]list format"""
-def print_error_value(two_theta,intensity,x_interval):
-    fitting = fitting_method_4(two_theta,intensity,x_interval)
-    error_value = []
-    for name, pars in fitting.params.items():
-        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
-        error = pars.stderr
-        error_value.append(error)
-    return error_value
+# """print all error value[5*16]"""
+# """[16*5]-[1,5]-[5,1]-[5*16]"""
+# """store the error in [5*16]list format"""
+# def print_error_value(two_theta,intensity,x_interval):
+#     fitting = fitting_method_4(two_theta,intensity,x_interval)
+#     error_value = []
+#     for name, pars in fitting.params.items():
+#         # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+#         error = pars.stderr
+#         error_value.append(error)
+#     return error_value
 
-    # return 0 if not_float(error_value) else error_value
-    # 0 if value is None else value
+#     # return 0 if not_float(error_value) else error_value
+#     # 0 if value is None else value
 
-def print_all_error_values(two_theta,intensity,x_interval):
-    all_data = []
-    for i in range(intensity.shape[0]):
-        data = print_error_value(two_theta,intensity[i],x_interval)
-        all_data.append(data)
-    return all_data
+# def print_all_error_values(two_theta,intensity,x_interval):
+#     all_data = []
+#     for i in range(intensity.shape[0]):
+#         data = print_error_value(two_theta,intensity[i],x_interval)
+#         all_data.append(data)
+#     return all_data
 
-all_error_values = print_all_error_values(two_theta,intensity,[1.2,2.5])
-all_error_values_transposed = np.array(all_error_values)
-all_error_values_transposed = all_error_values_transposed.astype(np.float32).transpose()
-all_error_values_transposed =  np.where(np.isnan(all_error_values_transposed), 0, all_error_values_transposed)
-print(all_error_values_transposed)
+# all_error_values = print_all_error_values(two_theta,intensity,[1.2,2.5])
+# all_error_values_transposed = np.array(all_error_values)
+# all_error_values_transposed = all_error_values_transposed.astype(np.float32).transpose()
+# all_error_values_transposed =  np.where(np.isnan(all_error_values_transposed), 0, all_error_values_transposed)
+# print(all_error_values_transposed)
 
 
 
 
 
-"""store the pars and error in [10*16]list format"""
-"""easy to export to csv file"""
-def print_par_error(two_theta,intensity,x_interval):
-    fitting = fitting_method_4(two_theta,intensity,x_interval)
+# """store the pars and error in [10*16]list format"""
+# """easy to export to csv file"""
+# def print_par_error(two_theta,intensity,x_interval):
+#     fitting = fitting_method_4(two_theta,intensity,x_interval)
     
-    par_err = []
-    for name, pars in fitting.params.items():
-        # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
-        error = pars.stderr
-        pars = pars.value
-        par_err.append(pars)
-        par_err.append(error)
-    return par_err
+#     par_err = []
+#     for name, pars in fitting.params.items():
+#         # print(" %s: %s +/- %s " %(name,pars.value,pars.stderr))
+#         error = pars.stderr
+#         pars = pars.value
+#         par_err.append(pars)
+#         par_err.append(error)
+#     return par_err
 
-def print_all_par_error(two_theta,intensity,x_interval):
-    all_data = []
-    for i in range(intensity.shape[0]):
-        data = print_par_error(two_theta,intensity[i],x_interval)
-        all_data.append(data)
-    return all_data
+# def print_all_par_error(two_theta,intensity,x_interval):
+#     all_data = []
+#     for i in range(intensity.shape[0]):
+#         data = print_par_error(two_theta,intensity[i],x_interval)
+#         all_data.append(data)
+#     return all_data
 
-all_par_error = print_all_par_error(two_theta,intensity,[1.2,2.5])
-all_par_error_transposed = np.array(all_par_error)
-all_par_error_transposed = all_par_error_transposed.astype(np.float32).transpose()
-all_par_error_transposed =  np.where(np.isnan(all_par_error_transposed), 0, all_par_error_transposed)
-print(all_par_error_transposed)
+# all_par_error = print_all_par_error(two_theta,intensity,[1.2,2.5])
+# all_par_error_transposed = np.array(all_par_error)
+# all_par_error_transposed = all_par_error_transposed.astype(np.float32).transpose()
+# all_par_error_transposed =  np.where(np.isnan(all_par_error_transposed), 0, all_par_error_transposed)
+# print(all_par_error_transposed)
 
 
 
