@@ -7,6 +7,11 @@ from method import(
     get_index_in_interval,
     interval_data,
     gaussian_fitting_curve,
+    gaussian_fitting_plot,
+    gaussian_plot_error,
+    gaussian_fitting_value,
+    mergeDic
+
 )
 
 
