@@ -412,11 +412,34 @@ def getCsv(dicT):
     datas = pd.DataFrame(dicT)
     peak1 = datas[datas.columns[0:10]]
     peak2 = datas[datas.columns[10:20]]
+    peak3 = datas[datas.columns[20:30]]
     peak1.to_csv('peak 1.csv',index=False)
     peak2.to_csv('peak 2.csv',index=False)
-    return peak1,peak2
+    peak3.to_csv('peak 3.csv',index=False)
+    return peak1,peak2,peak3
 
-    
+
+
+
+def chisquare(obs, exp):
+    """fitting index using chi square method.
+
+    Args:
+        obs ([array]): observed value 
+        exp ([type]): expected value
+
+    Returns:
+        [array]: fitting index
+    """    """"""
+    obs = np.atleast_1d(np.asanyarray(obs))
+    exp = np.atleast_1d(np.asanyarray(exp)) # convert list to array
+    if obs.size != exp.size:
+        print('The size of the observed array and the expected array is not equal')
+        exit()
+    return ((obs - exp) ** 2 / exp).sum(axis=0)
+
+
+
 
 # """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
