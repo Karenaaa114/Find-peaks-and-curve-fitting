@@ -344,6 +344,27 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars):
 
 
 
+def gaussian_plot_error(two_theta,intensity,x_interval,set_pars):
+    x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
+    plt.plot(x_interval_value, y_interval_value, '-', label='original data')
+    plt.title('Gaussian fitting result' )
+    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline_subtracted = y_interval_value - baseline
+    # plt.plot(x_interval_value, baseline,':',label='baseline')
+    # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
+    fitting,_ = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
+    plt.plot(x_interval_value, fitting + baseline, '--', label='fitting data')
+    # plt.plot(x_interval_value, fitting, '--', label='fitting')
+    error = abs(baseline_subtracted - fitting)
+    plt.plot(x_interval_value,error,':', label='error')
+    plt.xlim(0,70)
+    plt.ylim(0,3700)
+    plt.legend()
+    plt.savefig('Gaussian fitting result')
+    plt.show()
+
+
+
 
 
 # """gaussian fitting method 3 (used in skewing distribution)"""
