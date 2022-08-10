@@ -407,6 +407,17 @@ def mergeDic(dicT,dic):
 
 
 
+
+def getCsv(dicT):
+    datas = pd.DataFrame(dicT)
+    peak1 = datas[datas.columns[0:10]]
+    peak2 = datas[datas.columns[10:20]]
+    peak1.to_csv('peak 1.csv',index=False)
+    peak2.to_csv('peak 2.csv',index=False)
+    return peak1,peak2
+
+    
+
 # """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
 
