@@ -2,12 +2,9 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import codecs
+import os
 
-import math
-
-from scipy.signal import find_peaks
-from scipy.optimize import curve_fit
-from lmfit import models
 from lmfit.models import GaussianModel, LorentzianModel, PseudoVoigtModel, ExponentialModel
 
 from scipy import sparse
@@ -33,6 +30,38 @@ def read_data(filename):
     data_transposed = np.array(data).transpose()
     data_transposed = data_transposed.astype(np.float32)
     return data_transposed 
+
+
+
+
+def read_text_file(file_path):
+    with codecs.open(file_path, mode='r', encoding="utf-8-sig") as file:
+        data = np.loadtxt(file, skiprows=25, dtype=float)
+        return data
+
+def open_file(data_path):
+    files = os.listdir(data_path) # get all file name under the folder
+    files.sort()  # read the file in order
+    # print(files)
+    two_theta = []
+    intensities = []
+    for file in files: #traverse folder
+        if file[-3:] == '.gr':
+        # if not os.path.isdir(file): #determine whether it is a number, if not open it
+            file_path = data_path+"/"+file #open file
+                # with codecs.open(file_path, mode='r', encoding="utf-8-sig",errors='ignore') as file:
+                # with codecs.open(file_path, mode='r', encoding="utf-8-sig") as file:
+                #     data = np.loadtxt(file, skiprows=25, dtype=float)
+                #     print(data)
+            # print(file_path)
+            line = read_text_file(file_path).transpose()
+            two_theta = line[0]
+            intensities.append(line[1])
+
+    # data_transposed = np.array(data).transpose()
+    # data_transposed = data_transposed.astype(np.float32)
+    # return data_transposed 
+    return two_theta, intensities
 
 
 

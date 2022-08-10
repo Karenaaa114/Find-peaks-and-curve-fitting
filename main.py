@@ -10,8 +10,10 @@ from method import(
     gaussian_fitting_plot,
     gaussian_plot_error,
     gaussian_fitting_value,
-    mergeDic
-
+    mergeDic,
+    getCsv,
+    chisquare,
+    gaussian_fit_index
 )
 
 
