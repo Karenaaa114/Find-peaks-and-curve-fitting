@@ -441,6 +441,19 @@ def chisquare(obs, exp):
 
 
 
+def gaussian_fit_index(two_theta,intensity,x_interval,set_pars):
+    x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
+    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline_subtracted = y_interval_value - baseline
+    fitting,_ = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
+
+    observed = y_interval_value
+    expected = fitting + baseline
+
+    return chisquare(observed,expected)
+
+
+
 # """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
 
