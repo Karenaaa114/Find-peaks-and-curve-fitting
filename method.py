@@ -397,6 +397,16 @@ def gaussian_fitting_value(two_theta,intensity,x_interval):
 
 
 
+
+def mergeDic(dicT,dic):
+    for key in dic:
+        if key not in dicT:
+            dicT[key] = dic[key]
+        dicT[key] = dicT[key] + dic[key]
+    return dicT
+
+
+
 # """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
 
