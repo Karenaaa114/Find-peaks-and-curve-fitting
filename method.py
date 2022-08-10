@@ -76,7 +76,7 @@ def separate_x_y_axis(data):
         two_theta, intensity: two theta(x-axis) and intensities in different temperature(y-axis).
     """
     two_theta = data[0]
-    intensity = data[1:]
+    intensity = data[1]
     return two_theta, intensity
 
 
@@ -391,6 +391,71 @@ def gaussian_plot_error(two_theta,intensity,x_interval,set_pars):
     plt.legend()
     plt.savefig('Gaussian fitting result')
     plt.show()
+
+
+
+#lorentzian
+def lorentzian_fitting_curve(two_theta,intensity,x_interval,set_pars):
+    x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
+    mod = LorentzianModel(prefix='l1_')
+    pars = mod.guess(y_interval_value, x=x_interval_value)
+    pars['l1_center'].set(value=set_pars[0][0])
+    pars['l1_sigma'].set(value=set_pars[0][1])
+    pars['l1_amplitude'].set(value=set_pars[0][2])
+    for i in range(1,len(set_pars)):
+        mod_gauss = LorentzianModel(prefix='l%d_' % (i+1))
+        pars.update(mod_gauss.make_params())
+        mod = mod+mod_gauss
+        pars['l%d_center'%(i+1)].set(value=set_pars[i][0])
+        pars['l%d_sigma'%(i+1)].set(value=set_pars[i][1])
+        pars['l%d_amplitude'%(i+1)].set(value=set_pars[i][2])
+
+        fitting = mod.fit(y_interval_value, pars, x=x_interval_value)
+    return fitting.best_fit, fitting.params.items()
+
+
+
+
+def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars):
+    x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
+    plt.plot(x_interval_value, y_interval_value, '-', label='original data')
+    # plt.title('Lorentzian fitting for dataset %d' %i)
+    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline_subtracted = y_interval_value - baseline
+    plt.plot(x_interval_value, baseline,':',label='baseline')
+    plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
+    fitting,_ = lorentzian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
+    plt.plot(x_interval_value, fitting, '--', label='fitting')
+    plt.xlim(1.5,5)
+    plt.ylim(-1.5,7)
+    plt.legend()
+    # plt.savefig(f"{name}_plot.png")
+    plt.show()
+
+
+def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars):
+    x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
+    plt.plot(x_interval_value, y_interval_value, '-', label='original data')
+    plt.title('Lorentzian fitting result' )
+    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline_subtracted = y_interval_value - baseline
+    # plt.plot(x_interval_value, baseline,':',label='baseline')
+    # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
+    fitting,_ = lorentzian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
+    plt.plot(x_interval_value, fitting + baseline, '--', label='fitting data')
+    # plt.plot(x_interval_value, fitting, '--', label='fitting')
+    error = abs(baseline_subtracted - fitting)
+    plt.plot(x_interval_value,error,':', label='error')
+    plt.xlim(1.5,5)
+    plt.ylim(-1.5,7)
+    plt.legend()
+    plt.savefig('Lorentzian fitting result')
+    plt.show()
+
+
+
+
+
 
 
 
