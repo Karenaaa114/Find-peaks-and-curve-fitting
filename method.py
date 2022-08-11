@@ -511,16 +511,6 @@ def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars):
     plt.show()
 
 
-
-
-
-
-
-
-
-
-
-
 def gaussian_fitting_value(two_theta,intensity,x_interval):
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
@@ -563,16 +553,33 @@ def mergeDic(dicT,dic):
 
 
 
-def getCsv(dicT):
-    datas = pd.DataFrame(dicT)
-    peak1 = datas[datas.columns[0:10]]
-    peak2 = datas[datas.columns[10:20]]
-    peak3 = datas[datas.columns[20:30]]
-    peak1.to_csv('peak 1.csv',index=False)
-    peak2.to_csv('peak 2.csv',index=False)
-    peak3.to_csv('peak 3.csv',index=False)
-    return peak1,peak2,peak3
+# def getCsv(dicT):
+#     datas = pd.DataFrame(dicT)
+#     peak1 = datas[datas.columns[0:10]]
+#     peak2 = datas[datas.columns[10:20]]
+#     peak3 = datas[datas.columns[20:30]]
+#     peak1.to_csv('peak 1.csv',index=False)
+#     peak2.to_csv('peak 2.csv',index=False)
+#     peak3.to_csv('peak 3.csv',index=False)
+#     return peak1,peak2,peak3
 
+
+
+
+def getCsv(dicT,i):
+    datas = pd.DataFrame(dicT)
+    peaks = {}
+    for i in range(len(datas.columns)//10):
+        # exec(f'peak{i+1}' = datas[datas.columns[10*i:10*(i+1)]])
+        peaks['peak{}'.format(i+1)] = datas[datas.columns[10*i:10*(i+1)]]
+        # 'peaktry%d'%i = datas[datas.columns[0:10*(i+1)]]
+        # 'peak{}'.format(i+1).to_csv("'peak{}'.format(i+1).csv",index=False)
+        # "peak{}.csv".format(i+1)
+        # peaks['peak{}'.format(i+1)].to_csv("'peak{}'.format(i+1).csv",index=False)
+        peaks['peak{}'.format(i+1)].to_csv("peak{}.csv".format(i+1),index=False)
+    return peaks
+
+# peak1 = getCsv(dicT,3)
 
 
 
