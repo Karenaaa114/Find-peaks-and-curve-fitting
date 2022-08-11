@@ -476,6 +476,26 @@ def PseudoVoigt_fitting_curve(two_theta,intensity,x_interval,set_pars):
 
 
 
+def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars):
+    x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
+    plt.plot(x_interval_value, y_interval_value, '-', label='original data')
+    # plt.title('PseudoVoigt fitting for dataset %d' %i)
+    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline_subtracted = y_interval_value - baseline
+    plt.plot(x_interval_value, baseline,':',label='baseline')
+    plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
+    fitting,_ = PseudoVoigt_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
+    plt.plot(x_interval_value, fitting, '--', label='fitting')
+    plt.xlim(1.5,5)
+    plt.ylim(-1.5,7)
+    plt.legend()
+    # plt.savefig(f"{name}_plot.png")
+    plt.show()
+
+
+
+
+
 
 
 
