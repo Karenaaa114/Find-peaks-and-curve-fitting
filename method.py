@@ -583,6 +583,18 @@ def getCsv(dicT,i):
 
 
 
+
+def toCsv(two_theta,intensity,x_interval,set_pars):
+    dicT = {}
+    for i in range(len(intensity)):
+        tDic = gaussian_fitting_value(two_theta,intensity[i],x_interval,set_pars)
+        mergeDic(dicT,tDic)
+    getCsv(dicT,len(set_pars))
+
+
+
+    
+
 def chisquare(obs, exp):
     """fitting index using chi square method.
 
