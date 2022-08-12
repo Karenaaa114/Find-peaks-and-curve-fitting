@@ -63,6 +63,15 @@ def main():
         print('Do you want to plot the data?yes or no?')
 
     
+    interval_string = input('What range are you planning to fit?')    # [20,35]
+    interval = interval_string.split()
+    # print('list: ', interval)
+    for i in range(len(interval)): 
+        interval[i] = float(interval[i]) 
+
+
+
+    
 
 
 
