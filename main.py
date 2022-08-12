@@ -69,7 +69,9 @@ def main():
     for i in range(len(interval)): 
         interval[i] = float(interval[i]) 
 
-
+    
+    number = input('Which dataset are you planning to fit?')
+    number = int(number)
 
     
 
