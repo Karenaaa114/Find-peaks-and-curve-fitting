@@ -88,6 +88,12 @@ def main():
     # print(set_all_pars)
 # [3],[1.8,4.2],[[2.4,0.038,0.3],[3.8,0.07,1.13]]
 
+#plot gaussian, lorentzian, PseudoVoigt fitting result
+    gaussian_fitting_plot(two_theta,intensity[number],interval,set_all_pars)
+    gaussian_plot_error(two_theta,intensity[number],interval,set_all_pars)
+    lorentzian_plot_error(two_theta,intensity[number],interval,set_all_pars)
+    PseudoVoigt_plot_error(two_theta,intensity[number],interval,set_all_pars)
+
 
     
 
