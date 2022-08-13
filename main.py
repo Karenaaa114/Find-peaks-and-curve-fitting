@@ -63,7 +63,7 @@ def main():
         print('Do you want to plot the data?yes or no?')
 
     
-    interval_string = input('What range are you planning to fit?')    # [20,35]
+    interval_string = input('What range are you planning to fit?')   #[1.8,4.2] in "PdCeO2" file
     interval = interval_string.split()
     # print('list: ', interval)
     for i in range(len(interval)): 
@@ -72,6 +72,22 @@ def main():
     
     number = input('Which dataset are you planning to fit?')
     number = int(number)
+
+
+    peaks = input('How many peaks in this dataset?')   #[3]
+    set_all_pars = []
+    for j in range(int(peaks)):
+        pars = []
+        set_pars_string = input('What is your initial guess?')   # [[26,1,600],[28,1,750],[30,1,750]]
+        set_pars = set_pars_string.split()
+        for i in range(len(set_pars)):
+            # set_pars[i] = int(set_pars[i])
+            set_pars[i] = float(set_pars[i])
+            pars.append(set_pars)
+        set_all_pars.append(set_pars)
+    # print(set_all_pars)
+# [3],[1.8,4.2],[[2.4,0.038,0.3],[3.8,0.07,1.13]]
+
 
     
 
