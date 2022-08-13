@@ -95,6 +95,19 @@ def main():
     PseudoVoigt_plot_error(two_theta,intensity[number],interval,set_all_pars)
 
 
+#plot all of the dataset(one dataset per graph)
+    all_fitting = input('Do you want to plot all of the dataset?yes or no?')
+
+    if all_fitting == 'yes':
+        for i in range(len(intensity)):
+            plt.title('Gaussian fitting for dataset %d' %i)
+            gaussian_fitting_plot(two_theta,intensity[i],[1.8,4.2],[[2.4,0.038,0.3],[3.8,0.07,1.13]])
+    elif all_fitting == 'no':
+        print('That is fine!')
+    else:
+        print('Do you want to plot all of the dataset?yes or no?')
+
+
     
 
 
