@@ -226,7 +226,7 @@ def gaussian_plot_error(two_theta,intensity,x_interval,set_pars):
     error = abs(baseline_subtracted - fitting)
     plt.plot(x_interval_value,error,':', label='error')
     plt.legend()
-    plt.savefig('Gaussian fitting result')
+    plt.savefig('./fitting result/Gaussian fitting result')
     plt.show()
 
 
@@ -282,7 +282,7 @@ def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars):
     error = abs(baseline_subtracted - fitting)
     plt.plot(x_interval_value,error,':', label='error')
     plt.legend()
-    plt.savefig('Lorentzian fitting result')
+    plt.savefig('./fitting result/Lorentzian fitting result')
     plt.show()
 
 
@@ -336,7 +336,7 @@ def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars):
     error = abs(baseline_subtracted - fitting)
     plt.plot(x_interval_value,error,':', label='error')
     plt.legend()
-    plt.savefig('PseudoVoigt fitting result')
+    plt.savefig('./fitting result/PseudoVoigt fitting result')
     plt.show()
 
 
@@ -458,7 +458,7 @@ def change_fwhm(csvFile):
     plt.title("change in FWHM in {}".format(csvPre))              
     plt.xlabel("time")                
     plt.ylabel("FWHM") 
-    plt.savefig("change in FWHM in {}".format(csvPre))                 
+    plt.savefig("./change in FWHM and height/change in FWHM in {}".format(csvPre))                 
     plt.show()
 
 def all_change_fwhm():
@@ -483,7 +483,7 @@ def change_height(csvFile):
     plt.title("change in height in {}".format(csvPre))              
     plt.xlabel("time")                
     plt.ylabel("height") 
-    plt.savefig("change in height in {}".format(csvPre))                 
+    plt.savefig("./change in FWHM and height/change in height in {}".format(csvPre))                 
     plt.show() 
 
 
