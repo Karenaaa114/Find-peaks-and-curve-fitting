@@ -121,6 +121,14 @@ def main():
         print('Do you want to see the change in FWHM? yes or no?')
 
 
+    change_height = input('Do you want to see the change in height? yes or no?')
+    if change_height == 'yes':
+        all_change_height()
+    elif change_height == 'no':
+        print('That is fine!')
+    else:
+        print('Do you want to see the change in height? yes or no?')
+
     
 
 
