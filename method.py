@@ -628,6 +628,37 @@ def gaussian_fit_index(two_theta,intensity,x_interval,set_pars):
 
 
 
+#plot change in fwhm
+def change_fwhm(csvFile):
+    tPath = os.path.join('peakFiles',csvFile)
+    csvPre = csvFile.split('.')[0]
+    readData = pd.read_csv(tPath)   
+    fwhm = readData.iloc[:,6].tolist()  
+    # time = list(range(0,220,10))  
+    time = list(range(0,len(fwhm)*10,10))        
+    error = readData.iloc[:,7].tolist()
+    plt.plot(time, fwhm,'r-^')            
+    plt.errorbar(time, fwhm, yerr=error)
+    plt.title("change in FWHM in {}".format(csvPre))              
+    plt.xlabel("time")                
+    plt.ylabel("FWHM") 
+    plt.savefig("change in FWHM in {}".format(csvPre))                 
+    plt.show()
+
+def all_change_fwhm():
+    Files = []
+    for root,dirs,files in os.walk('./peakFiles'):
+        for name in files:
+            Files.append(name)
+    for f in Files:
+        change_fwhm(f)
+
+
+
+
+
+
+
 # """gaussian fitting method 3 (used in skewing distribution)"""
 #[1,3.5] interval use background subtraction
 
