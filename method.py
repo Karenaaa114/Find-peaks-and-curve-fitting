@@ -198,7 +198,8 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Gaussian fitting for dataset %d' %i)
-    baseline = baseline_als(y_interval_value,10000,0.0001)
+    # baseline = baseline_als(y_interval_value,10000,0.0001)
+    baseline = baseline_als(y_interval_value,10000,0.01)
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
