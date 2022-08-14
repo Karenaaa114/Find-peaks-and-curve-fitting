@@ -93,7 +93,7 @@ def plot_data(two_theta, intensity):
         two_theta (1-D array)
         intensity (2-D array)
     """
-    for i in range(intensity.shape[0]):
+    for i in range(len(intensity)):
         plt.plot(two_theta, intensity[i], linewidth = 0.5)
     plt.title("intensity")
     plt.xlabel(r'$2\theta$')
@@ -108,7 +108,7 @@ def plot_data_log10(two_theta, intensity):
         two_theta (1-D array)
         intensity (2-D array)
     """
-    for i in range(intensity.shape[0]):
+    for i in range(len(intensity)):
         plt.loglog(two_theta, intensity[i], linewidth = 0.5)
         # plt.plot(two_theta_log, intensity_log[i], linewidth = 0.5)
     plt.title("intensity")
@@ -204,8 +204,6 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars):
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
     fitting,_ = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     plt.plot(x_interval_value, fitting, '--', label='fitting')
-    plt.xlim(1.5,5)
-    plt.ylim(-1.5,7)
     plt.legend()
     # plt.savefig(f"{name}_plot.png")
     plt.show()
@@ -226,8 +224,6 @@ def gaussian_plot_error(two_theta,intensity,x_interval,set_pars):
     # plt.plot(x_interval_value, fitting, '--', label='fitting')
     error = abs(baseline_subtracted - fitting)
     plt.plot(x_interval_value,error,':', label='error')
-    plt.xlim(1.5,5)
-    plt.ylim(-1.5,7)
     plt.legend()
     plt.savefig('Gaussian fitting result')
     plt.show()
@@ -266,8 +262,6 @@ def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars):
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
     fitting,_ = lorentzian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     plt.plot(x_interval_value, fitting, '--', label='fitting')
-    plt.xlim(1.5,5)
-    plt.ylim(-1.5,7)
     plt.legend()
     # plt.savefig(f"{name}_plot.png")
     plt.show()
@@ -286,8 +280,6 @@ def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars):
     # plt.plot(x_interval_value, fitting, '--', label='fitting')
     error = abs(baseline_subtracted - fitting)
     plt.plot(x_interval_value,error,':', label='error')
-    plt.xlim(1.5,5)
-    plt.ylim(-1.5,7)
     plt.legend()
     plt.savefig('Lorentzian fitting result')
     plt.show()
@@ -324,8 +316,6 @@ def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars):
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
     fitting,_ = PseudoVoigt_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     plt.plot(x_interval_value, fitting, '--', label='fitting')
-    plt.xlim(1.5,5)
-    plt.ylim(-1.5,7)
     plt.legend()
     # plt.savefig(f"{name}_plot.png")
     plt.show()
@@ -344,19 +334,17 @@ def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars):
     # plt.plot(x_interval_value, fitting, '--', label='fitting')
     error = abs(baseline_subtracted - fitting)
     plt.plot(x_interval_value,error,':', label='error')
-    plt.xlim(1.5,5)
-    plt.ylim(-1.5,7)
     plt.legend()
     plt.savefig('PseudoVoigt fitting result')
     plt.show()
 
 
-def gaussian_fitting_value(two_theta,intensity,x_interval):
+def gaussian_fitting_value(two_theta,intensity,x_interval,set_pars):
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     baseline = baseline_als(y_interval_value,10000,0.01)
     baseline_subtracted = y_interval_value - baseline
-    _,fitting_params = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval)
+    _,fitting_params = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     for name, pars in fitting_params:
         if pars.value is not None:
             pars.value = pars.value
