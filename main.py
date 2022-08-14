@@ -86,7 +86,7 @@ def main():
             pars.append(set_pars)
         set_all_pars.append(set_pars)
     # print(set_all_pars)
-# [3],[1.8,4.2],[[2.4,0.038,0.3],[3.8,0.07,1.13]]
+# [3],[1.8,4.2],[[2.35,0.038,0.3],[3.8,0.07,1.13]]
 
 #plot gaussian, lorentzian, PseudoVoigt fitting result
     gaussian_fitting_plot(two_theta,intensity[number],interval,set_all_pars)

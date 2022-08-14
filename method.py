@@ -391,7 +391,7 @@ def getCsv(dicT,i):
         # 'peak{}'.format(i+1).to_csv("'peak{}'.format(i+1).csv",index=False)
         # "peak{}.csv".format(i+1)
         # peaks['peak{}'.format(i+1)].to_csv("'peak{}'.format(i+1).csv",index=False)
-        peaks['peak{}'.format(i+1)].to_csv("peak{}.csv".format(i+1),index=False)
+        peaks['peak{}'.format(i+1)].to_csv("./peakFiles/peak{}.csv".format(i+1),index=False)
     return peaks
 
 # peak1 = getCsv(dicT,3)
