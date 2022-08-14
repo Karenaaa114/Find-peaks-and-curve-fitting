@@ -108,6 +108,19 @@ def main():
         print('Do you want to plot all of the dataset?yes or no?')
 
 
+
+    toCsv(two_theta,intensity,interval,set_all_pars)
+
+
+    change_fwhm = input('Do you want to see the change in FWHM? yes or no?')
+    if change_fwhm == 'yes':
+        all_change_fwhm()
+    elif change_fwhm == 'no':
+        print('That is fine!')
+    else:
+        print('Do you want to see the change in FWHM? yes or no?')
+
+
     
 
 
