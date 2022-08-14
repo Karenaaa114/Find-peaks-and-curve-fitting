@@ -653,6 +653,33 @@ def all_change_fwhm():
     for f in Files:
         change_fwhm(f)
 
+#plot change in height
+def change_height(csvFile):
+    tPath = os.path.join('peakFiles',csvFile)
+    csvPre = csvFile.split('.')[0]
+    readData = pd.read_csv(tPath)
+    height = readData.iloc[:,8].tolist()  
+    # time = list(range(0,220,10)) 
+    time = list(range(0,len(height)*10,10))         
+    error = readData.iloc[:,9].tolist()
+    plt.plot(time, height,'r-^')            
+    plt.errorbar(time, height, yerr=error)
+    plt.title("change in height in {}".format(csvPre))              
+    plt.xlabel("time")                
+    plt.ylabel("height") 
+    plt.savefig("change in height in {}".format(csvPre))                 
+    plt.show() 
+
+
+
+def all_change_height():
+    Files = []
+    for root,dirs,files in os.walk('./peakFiles'):
+        for name in files:
+            Files.append(name)
+    for f in Files:
+        change_height(f)
+
 
 
 
