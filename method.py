@@ -131,6 +131,20 @@ def plot_data_log10(two_theta, intensity):
     plt.ylabel("intensity")
     plt.show()
 
+def plot_data_3d(two_theta, intensity):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    
+    x = two_theta
+    for i in range(len(intensity)):
+        # time = list(range(0,i*10,10)) 
+        time = np.ones(len(intensity[0]))*i*10
+        ax.plot3D(x, time, intensity[i])
+    ax.set_xlabel(r'$2\theta$')
+    ax.set_ylabel("time")
+    ax.set_zlabel("intensity")
+    plt.show()
+
 
 # """print height, center, width and area for Gaussian fitting"""
 # for i in range(len(popt_gauss)):

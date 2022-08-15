@@ -23,22 +23,23 @@ from method import *
 def main():
     filename = "PdCeO2"
     two_theta, intensity = open_gr_file(filename)
-    # two_theta, intensity = separate_x_y_axis(data)
     plot_data(two_theta, intensity)
+    plot_data_3d(two_theta, intensity)
     dataset_number = 3
     x_interval = [1.8,4.2]
     set_pars = [[2.4,0.038,0.3],[3.8,0.07,1.13]]
+    # print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars))
 
-    for i in range(len(intensity)):
-        plt.title('Gaussian fitting for dataset %d' %i)
-        gaussian_fitting_plot(two_theta,intensity[i],x_interval,set_pars)
+    # for i in range(len(intensity)):
+    #     plt.title('Gaussian fitting for dataset %d' %i)
+    #     gaussian_fitting_plot(two_theta,intensity[i],x_interval,set_pars)
 
-    gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-    lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-    PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-    toCsv(two_theta,intensity,x_interval,set_pars)
-    all_change_fwhm()
-    all_change_height()
+    # gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
+    # lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
+    # PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
+    # toCsv(two_theta,intensity,x_interval,set_pars)
+    # all_change_fwhm()
+    # all_change_height()
 
 # def main():
 #     filename = "ZnO transformation.csv"
