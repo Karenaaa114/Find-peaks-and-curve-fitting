@@ -11,25 +11,40 @@ from scipy import sparse
 from scipy.sparse.linalg import spsolve
 
 
-def read_data(filename):
-    """Return the data from csv file and transpose the data to read by row.
+# def read_data(filename):
+#     """Return the data from csv file and transpose the data to read by row.
 
-    Args:
-        filename (.csv file)
+#     Args:
+#         filename (.csv file)
 
-    Returns:
-        data_transposed: data
-    """
+#     Returns:
+#         data_transposed: data
+#     """
 
-    data = []
-    with open(filename, 'r') as csvfile:
-        csv_reader = csv.reader(csvfile)  
-        for column in csv_reader:            
-            data.append(column)
+#     data = []
+#     with open(filename, 'r') as csvfile:
+#         csv_reader = csv.reader(csvfile)  
+#         for column in csv_reader:            
+#             data.append(column)
 
-    data_transposed = np.array(data).transpose()
-    data_transposed = data_transposed.astype(np.float32)
-    return data_transposed 
+#     data_transposed = np.array(data).transpose()
+#     data_transposed = data_transposed.astype(np.float32)
+#     return data_transposed 
+
+def load_csv(filename):
+    with open(filename) as file_name:
+        data = np.loadtxt(file_name, delimiter=",")
+        return data
+
+def read_csv_file(filename):
+    line = load_csv(filename).transpose()
+    two_theta = line[0]
+    intensity = []
+    for i in range(1,len(line)):
+        intensityy = line[i]
+        intensity.append(intensityy)
+    return two_theta, intensity
+
 
 
 
@@ -39,7 +54,7 @@ def read_text_file(file_path):
         data = np.loadtxt(file, skiprows=25, dtype=float)
         return data
 
-def open_file(data_path):
+def open_gr_file(data_path):
     files = os.listdir(data_path) # get all file name under the folder
     files.sort()  # read the file in order
     # print(files)
