@@ -11,41 +11,17 @@ from scipy import sparse
 from scipy.sparse.linalg import spsolve
 
 
-# def read_data(filename):
-#     """Return the data from csv file and transpose the data to read by row.
-
-#     Args:
-#         filename (.csv file)
-
-#     Returns:
-#         data_transposed: data
-#     """
-
-#     data = []
-#     with open(filename, 'r') as csvfile:
-#         csv_reader = csv.reader(csvfile)  
-#         for column in csv_reader:            
-#             data.append(column)
-
-#     data_transposed = np.array(data).transpose()
-#     data_transposed = data_transposed.astype(np.float32)
-#     return data_transposed 
-
-def load_csv(filename):
-    with open(filename) as file_name:
-        data = np.loadtxt(file_name, delimiter=",")
-        return data
 
 def read_csv_file(filename):
-    line = load_csv(filename).transpose()
+    with open(filename) as file_name:
+        data = np.loadtxt(file_name, delimiter=",")
+    line = data.transpose()
     two_theta = line[0]
     intensity = []
     for i in range(1,len(line)):
         intensityy = line[i]
         intensity.append(intensityy)
     return two_theta, intensity
-
-
 
 
 
@@ -454,9 +430,10 @@ def getCsv(dicT,i):
 def toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars):
     dicT = {}
     for i in range(len(intensity)):
-        tDic = gaussian_fitting_value(two_theta,intensity[i],x_interval,set_pars,baseline_pars[0],baseline_pars[1])
+        tDic = gaussian_fitting_value(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
         mergeDic(dicT,tDic)
     getCsv(dicT,len(set_pars))
+
 
 
 
