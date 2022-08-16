@@ -192,8 +192,18 @@ def baseline_als(y, lam, p, niter=10):
 
 
 
-# def gaussian_fitting_curve(two_theta,intensity,x_interval,gauss1,gauss2):
 def gaussian_fitting_curve(two_theta,intensity,x_interval,set_pars):
+    """Fit the curve use Gaussian distribution.
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+
+    Returns:
+        fitting.best_fit, fitting.params.items(): _description_
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     mod = GaussianModel(prefix='g1_')
     pars = mod.guess(y_interval_value, x=x_interval_value)
