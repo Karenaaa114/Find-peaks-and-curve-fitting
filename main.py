@@ -5,42 +5,48 @@ import matplotlib.pyplot as plt
 from method import *
 
 
-# when use data "PdCeO2" with all .rg file in the folder
-def main():
-    filename = "PdCeO2"
-    two_theta, intensity = open_gr_file(filename)
-    plot_data(two_theta, intensity)
-    plot_data_3d(two_theta, intensity)
-    dataset_number = 3
-    x_interval = [1.8,4.2]
-    set_pars = [[2.4,0.038,0.3],[3.8,0.07,1.13]]
-    baseline_pars = [10000,0.01]
-    print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars))
-    gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
-    lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
-    PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
-
-    gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-    lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-    PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-    toCsv(two_theta,intensity,x_interval,set_pars)
-    all_change_fwhm()
-    all_change_height()
-
-
-# when use data "ZnO transformation.csv" 
+#when use data "PdCeO2" with all .rg file in the folder
 # def main():
-#     filename = "ZnO transformation.csv"
-#     two_theta, intensity = read_csv_file(filename)
+#     filename = "PdCeO2"
+#     two_theta, intensity = open_gr_file(filename)
 #     plot_data(two_theta, intensity)
 #     plot_data_3d(two_theta, intensity)
 #     dataset_number = 3
+#     x_interval = [1.8,4.2]
+#     set_pars = [[2.4,0.038,0.3],[3.8,0.07,1.13]]
+#     baseline_pars = [10000,0.01]
+#     # print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars))
+#     # gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
+#     # lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
+#     # PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
+
+#     # gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+#     # lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+#     # PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+#     toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars)
+#     all_change_fwhm()
+#     all_change_height()
+
+
+# when use data "ZnO transformation.csv" 
+def main():
+    filename = "ZnO transformation.csv"
+    two_theta, intensity = read_csv_file(filename)
+    plot_data(two_theta, intensity)
+    plot_data_3d(two_theta, intensity)
+#     dataset_number = 3
 #     x_interval = [20,35]
 #     set_pars = [[26.4,1,600],[28.4,1,750],[30,1,750]]
-#     gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-#     lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-#     PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars)
-#     toCsv(two_theta,intensity,x_interval,set_pars)
+#     baseline_pars = [10000,0.0001]
+#     print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars))
+#     # gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
+#     # lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
+#     # PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
+
+#     gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+#     lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+#     PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+#     toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars)
 #     all_change_fwhm()
 #     all_change_height()
 
@@ -64,7 +70,7 @@ def main():
     
 #     plot = input('Do you want to plot the data?yes or no?')
 #     if plot == 'yes':
-#         print(plot_data(two_theta, intensity))
+#         plot_data(two_theta, intensity)
 #     elif plot == 'no':
 #         print('That is fine!')
 #     else:
@@ -73,7 +79,7 @@ def main():
 
 #     plot_3d = input('Do you want to plot 3D version of the data?yes or no?')
 #     if plot_3d == 'yes':
-#         print(plot_data_3d(two_theta, intensity))
+#         plot_data_3d(two_theta, intensity)
 #     elif plot_3d == 'no':
 #         print('That is fine!')
 #     else:
@@ -89,6 +95,12 @@ def main():
     
 #     number = input('Which dataset are you planning to fit?')
 #     number = int(number)
+
+#     baseline_parameter = input('what are the smoothness and asymmetry guess for baseline?')
+#     base_parameter = baseline_parameter.split()
+#     # print('list: ', interval)
+#     for i in range(len(base_parameter)): 
+#         base_parameter[i] = float(base_parameter[i]) 
 
 
 #     peaks = input('How many peaks in this dataset?')   #[3]
@@ -106,10 +118,10 @@ def main():
 # # [3],[1.8,4.2],[[2.35,0.038,0.3],[3.8,0.07,1.13]]
 
 # #plot gaussian, lorentzian, PseudoVoigt fitting result
-#     gaussian_fitting_plot(two_theta,intensity[number],interval,set_all_pars)
-#     gaussian_plot_error(two_theta,intensity[number],interval,set_all_pars)
-#     lorentzian_plot_error(two_theta,intensity[number],interval,set_all_pars)
-#     PseudoVoigt_plot_error(two_theta,intensity[number],interval,set_all_pars)
+#     gaussian_fitting_plot(two_theta,intensity[number],interval,set_all_pars,baseline_parameter)
+#     gaussian_plot_error(two_theta,intensity[number],interval,set_all_pars,baseline_parameter)
+#     lorentzian_plot_error(two_theta,intensity[number],interval,set_all_pars,baseline_parameter)
+#     PseudoVoigt_plot_error(two_theta,intensity[number],interval,set_all_pars,baseline_parameter)
 
 
 # #plot all of the dataset(one dataset per graph)

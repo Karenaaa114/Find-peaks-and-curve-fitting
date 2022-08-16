@@ -13,6 +13,14 @@ from scipy.sparse.linalg import spsolve
 
 
 def read_csv_file(filename):
+    """Read the data from .csv file.
+
+    Args:
+        filename (.csv file): The .csv file with first column is two_theta(x-axis) and the rest of columns are intensities(y-axis).
+
+    Returns:
+        two_theta (ndarray), intensity (list that contains ndarray): Two_theta is x-axis and intensity is y-axis.
+    """
     with open(filename) as file_name:
         data = np.loadtxt(file_name, delimiter=",")
     line = data.transpose()
@@ -26,11 +34,27 @@ def read_csv_file(filename):
 
 
 def read_text_file(file_path):
+    """Read the data from file that skip the first 25 rows.
+
+    Args:
+        file_path : The file that the first 25 rows are useless.
+
+    Returns:
+        data
+    """
     with codecs.open(file_path, mode='r', encoding="utf-8-sig") as file:
         data = np.loadtxt(file, skiprows=25, dtype=float)
         return data
 
 def open_gr_file(data_path):
+    """Read the data from .gr file in one folder. In each .gr file, first column is two_theta(x-axis) and the rest of columns are intensity(y-axis).
+
+    Args:
+        data_path (a folder): A folder that contains all .gr file. 
+
+    Returns:
+        two_theta (ndarray), intensities (list that contains ndarray): Two_theta is x-axis and intensities is y-axis.
+    """
     files = os.listdir(data_path) # get all file name under the folder
     files.sort()  # read the file in order
     # print(files)
@@ -40,36 +64,10 @@ def open_gr_file(data_path):
         if file[-3:] == '.gr':
         # if not os.path.isdir(file): #determine whether it is a number, if not open it
             file_path = data_path+"/"+file #open file
-                # with codecs.open(file_path, mode='r', encoding="utf-8-sig",errors='ignore') as file:
-                # with codecs.open(file_path, mode='r', encoding="utf-8-sig") as file:
-                #     data = np.loadtxt(file, skiprows=25, dtype=float)
-                #     print(data)
-            # print(file_path)
             line = read_text_file(file_path).transpose()
             two_theta = line[0]
             intensities.append(line[1])
-
-    # data_transposed = np.array(data).transpose()
-    # data_transposed = data_transposed.astype(np.float32)
-    # return data_transposed 
     return two_theta, intensities
-
-
-
-
-def separate_x_y_axis(data):
-    """To separate the data into two-theta(x-axis) and intensities(y-axis).
-
-    Args:
-        data (2-D array): the first line is two_theta(x-axis) and others are intensity(y-axis).
-
-    Returns:
-        two_theta, intensity: two theta(x-axis) and intensities in different temperature(y-axis).
-    """
-    two_theta = data[0]
-    intensity = data[1]
-    return two_theta, intensity
-
 
 
 
