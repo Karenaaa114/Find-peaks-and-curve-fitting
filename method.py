@@ -223,12 +223,13 @@ def gaussian_fitting_curve(two_theta,intensity,x_interval,set_pars):
 
 
 
-def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars):
+def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Gaussian fitting for dataset %d' %i)
     # baseline = baseline_als(y_interval_value,10000,0.0001)
-    baseline = baseline_als(y_interval_value,10000,0.01)
+    # baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -237,15 +238,22 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars):
     plt.legend()
     # plt.savefig(f"{name}_plot.png")
     plt.show()
+    
+
+
+def gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    for i in range(len(intensity)):
+        plt.title('Gaussian fitting for dataset %d' %i)
+        gaussian_fitting_plot(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
+        plt.show()
 
 
 
-
-def gaussian_plot_error(two_theta,intensity,x_interval,set_pars):
+def gaussian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('Gaussian fitting result' )
-    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -282,11 +290,11 @@ def lorentzian_fitting_curve(two_theta,intensity,x_interval,set_pars):
 
 
 
-def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars):
+def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Lorentzian fitting for dataset %d' %i)
-    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -297,11 +305,18 @@ def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars):
     plt.show()
 
 
-def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars):
+def lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    for i in range(len(intensity)):
+        plt.title('Lorentzian fitting for dataset %d' %i)
+        lorentzian_fitting_plot(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
+        plt.show()
+
+
+def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('Lorentzian fitting result' )
-    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -336,11 +351,11 @@ def PseudoVoigt_fitting_curve(two_theta,intensity,x_interval,set_pars):
     return fitting.best_fit, fitting.params.items()
 
 
-def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars):
+def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('PseudoVoigt fitting for dataset %d' %i)
-    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -351,11 +366,18 @@ def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars):
     plt.show()
 
 
-def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars):
+def PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    for i in range(len(intensity)):
+        plt.title('PseudoVoigt fitting for dataset %d' %i)
+        PseudoVoigt_fitting_plot(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
+        plt.show()
+
+
+def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('PseudoVoigt fitting result' )
-    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -369,10 +391,10 @@ def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars):
     plt.show()
 
 
-def gaussian_fitting_value(two_theta,intensity,x_interval,set_pars):
+def gaussian_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_pars):
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     _,fitting_params = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     for name, pars in fitting_params:
@@ -429,10 +451,10 @@ def getCsv(dicT,i):
 
 
 
-def toCsv(two_theta,intensity,x_interval,set_pars):
+def toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars):
     dicT = {}
     for i in range(len(intensity)):
-        tDic = gaussian_fitting_value(two_theta,intensity[i],x_interval,set_pars)
+        tDic = gaussian_fitting_value(two_theta,intensity[i],x_interval,set_pars,baseline_pars[0],baseline_pars[1])
         mergeDic(dicT,tDic)
     getCsv(dicT,len(set_pars))
 
@@ -460,9 +482,9 @@ def chisquare(obs, exp):
 
 
 
-def gaussian_fit_index(two_theta,intensity,x_interval,set_pars):
+def gaussian_fit_index(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    baseline = baseline_als(y_interval_value,10000,0.01)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     fitting,_ = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
 
