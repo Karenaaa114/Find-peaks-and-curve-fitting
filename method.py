@@ -19,7 +19,7 @@ def read_csv_file(filename):
         filename (.csv file): The .csv file with first column is two_theta(x-axis) and the rest of columns are intensities(y-axis).
 
     Returns:
-        two_theta (ndarray), intensity (list that contains ndarray): Two_theta is x-axis and intensity is y-axis.
+        two_theta (1-D array), intensity (2-D array): Two_theta is x-axis and intensity is y-axis.
     """
     with open(filename) as file_name:
         data = np.loadtxt(file_name, delimiter=",")
@@ -53,7 +53,7 @@ def open_gr_file(data_path):
         data_path (a folder): A folder that contains all .gr file. 
 
     Returns:
-        two_theta (ndarray), intensities (list that contains ndarray): Two_theta is x-axis and intensities is y-axis.
+        two_theta (1-D array), intensities (2-D array): Two_theta is x-axis and intensities is y-axis.
     """
     files = os.listdir(data_path) # get all file name under the folder
     files.sort()  # read the file in order
@@ -76,7 +76,7 @@ def open_gr_file(data_path):
 # intensity_log = np.log10(intensity)
 
 def plot_data(two_theta, intensity):
-    """Plot the graph of data.
+    """Plot the graph of data with two_theta is x-axis and intensity is y-axis.
 
     Args:
         two_theta (1-D array)
@@ -91,7 +91,7 @@ def plot_data(two_theta, intensity):
     plt.show()
 
 def plot_data_log10(two_theta, intensity):
-    """Plot the graph of data after log10.
+    """Plot the graph of data after log10 with two_theta is x-axis and intensity is y-axis.
 
     Args:
         two_theta (1-D array)
@@ -106,6 +106,13 @@ def plot_data_log10(two_theta, intensity):
     plt.show()
 
 def plot_data_3d(two_theta, intensity):
+    """Plot the 3D graph of data with two_theta is x-axis, time is y-axis and intensity is z-axis.
+
+    Args:
+        two_theta (1-D array)
+        intensity (2-D array)
+    """    
+    
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     
@@ -143,8 +150,18 @@ def get_index_in_interval(datax,x_interval):
 
 
 
-"""select data from interval"""
+
 def interval_data(two_theta,intensity,x_interval):
+    """select data from interval
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+
+    Returns:
+        two_theta[interval_index](1-D array), intensity(1-D array)
+    """
     interval_index = get_index_in_interval(two_theta, x_interval)
     return two_theta[interval_index], intensity[interval_index]
 
@@ -154,13 +171,13 @@ def baseline_als(y, lam, p, niter=10):
     """Define a baseline to make the distribution flat on.
 
     Args:
-        y (_type_): Matrix with spectra in rows
-        lam (_type_): 2nd derivative constraint (smoothness parameter)
-        p (_type_): Weighting of positive residuals
+        y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
+        lam (int): 2nd derivative constraint (smoothness parameter)
+        p (float): Weighting of positive residuals
         niter (int, optional): Maximum number of iterations. Defaults to 10.
 
     Returns:
-        _type_: _description_
+        z: baseline of the data
     """
     L = len(y)
     matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
@@ -446,7 +463,7 @@ def chisquare(obs, exp):
 
     Returns:
         [array]: fitting index
-    """    """"""
+    """   
     obs = np.atleast_1d(np.asanyarray(obs))
     exp = np.atleast_1d(np.asanyarray(exp)) # convert list to array
     if obs.size != exp.size:
