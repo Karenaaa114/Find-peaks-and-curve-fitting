@@ -535,6 +535,47 @@ def gaussian_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_pars
         # print (" %s: %0.6f +/- %0.6f " %(name,pars.value,pars.stderr))
     return dic
 
+def PseudoVoigt_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Print Gaussian fitting value
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+        baseline_pars (1-D list): parameter of the baseline guess in format [smoothness,weighting of positive residuals]
+
+    Returns:
+        dic(dictionary): a dictionary that contains amplitude, amplitude, fwhm, sigma and height value for peak fitting result
+    """
+    dic = {}
+    x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline_subtracted = y_interval_value - baseline
+    _,fitting_params = PseudoVoigt_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
+    for name, pars in fitting_params:
+        if pars.value is not None:
+            pars.value = pars.value
+        else:
+            pars.value = 0
+
+        if pars.stderr is not None:
+            pars.stderr = pars.stderr
+        else:
+            pars.stderr = 0
+        # pars.value = np.where(np.isnan(pars.value), 0, pars.value)
+        # pars.stderr = np.where(np.isnan(pars.stderr), 0, pars.stderr)
+        key1 = name
+        key2 = name+'error'
+        if key1 not in dic:
+            dic[key1] = []
+        if key2 not in dic:
+            dic[key2] = []
+        dic[key1].append(pars.value)
+        dic[key2].append(pars.stderr)
+        # print (" %s: %0.6f +/- %0.6f " %(name,pars.value,pars.stderr))
+    return dic
+
 
 
 
@@ -552,12 +593,7 @@ def getCsv(dicT,i):
     datas = pd.DataFrame(dicT)
     peaks = {}
     for i in range(len(datas.columns)//10):
-        # exec(f'peak{i+1}' = datas[datas.columns[10*i:10*(i+1)]])
         peaks['peak{}'.format(i+1)] = datas[datas.columns[10*i:10*(i+1)]]
-        # 'peaktry%d'%i = datas[datas.columns[0:10*(i+1)]]
-        # 'peak{}'.format(i+1).to_csv("'peak{}'.format(i+1).csv",index=False)
-        # "peak{}.csv".format(i+1)
-        # peaks['peak{}'.format(i+1)].to_csv("'peak{}'.format(i+1).csv",index=False)
         peaks['peak{}'.format(i+1)].to_csv("./peakFiles/peak{}.csv".format(i+1),index=False)
     return peaks
 
@@ -570,6 +606,8 @@ def toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars):
     dicT = {}
     for i in range(len(intensity)):
         tDic = gaussian_fitting_value(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
+        # tDic = PseudoVoigt_fitting_value(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
+        # tDic = lorentzian_fitting_value(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
         mergeDic(dicT,tDic)
     getCsv(dicT,len(set_pars))
 
