@@ -115,12 +115,40 @@ def plot_data_3d(two_theta, intensity):
     
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
+    ax.set_box_aspect(aspect = (20,10,10))
     
-    x = two_theta
+
     for i in range(len(intensity)):
         # time = list(range(0,i*10,10)) 
         time = np.ones(len(intensity[0]))*i*10
-        ax.plot3D(x, time, intensity[i])
+        ax.plot3D(two_theta, time, intensity[i], 'black', linewidth = 0.3)
+    
+    ax.set_xlabel(r'$2\theta$')
+    ax.set_ylabel("time")
+    ax.set_zlabel("intensity")
+    plt.show()
+
+
+
+def plot_data_3d_range(two_theta, intensity, x_interval):
+    """Plot the 3D graph of data with two_theta is x-axis, time is y-axis and intensity is z-axis.
+
+    Args:
+        two_theta (1-D array)
+        intensity (2-D array)
+    """    
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_box_aspect(aspect = (20,10,10))
+    
+
+    for i in range(len(intensity)): 
+        # time = np.ones(len(intensity[0]))*i*10
+        x_interval_value, y_interval_value = interval_data(two_theta,intensity[i],x_interval)
+        time = np.ones(len(y_interval_value))*i*10
+        ax.plot3D(x_interval_value, time, y_interval_value, 'black', linewidth = 0.3)
+    
     ax.set_xlabel(r'$2\theta$')
     ax.set_ylabel("time")
     ax.set_zlabel("intensity")

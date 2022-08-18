@@ -32,8 +32,10 @@ from method import *
 def main():
     filename = "ZnO transformation.csv"
     two_theta, intensity = read_csv_file(filename)
-    plot_data(two_theta, intensity)
+    # plot_data(two_theta, intensity)
     plot_data_3d(two_theta, intensity)
+    plot_data_3d_range(two_theta, intensity, [20,50])
+    plot_data_3d_range(two_theta, intensity, [24,34])
 #     dataset_number = 3
 #     x_interval = [20,35]
 #     set_pars = [[26.4,1,600],[28.4,1,750],[30,1,750]]
