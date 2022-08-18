@@ -146,11 +146,12 @@ def plot_data_3d_range(two_theta, intensity, x_interval):
     for i in range(len(intensity)): 
         # time = np.ones(len(intensity[0]))*i*10
         x_interval_value, y_interval_value = interval_data(two_theta,intensity[i],x_interval)
-        time = np.ones(len(y_interval_value))*i*10
-        ax.plot3D(x_interval_value, time, y_interval_value, 'black', linewidth = 0.3)
+        # time = np.ones(len(y_interval_value))*i*10
+        temperature = np.ones(len(y_interval_value))*i*4.68
+        ax.plot3D(x_interval_value, temperature, y_interval_value, 'black', linewidth = 0.3)
     
     ax.set_xlabel(r'$2\theta$')
-    ax.set_ylabel("time")
+    ax.set_ylabel("temperature")
     ax.set_zlabel("intensity")
     plt.show()
 
@@ -196,7 +197,7 @@ def interval_data(two_theta,intensity,x_interval):
 
 
 def baseline_als(y, lam, p, niter=10):
-    """Define a baseline to make the distribution flat on.
+    """Generate a baseline to make the distribution flat on.
 
     Args:
         y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
@@ -221,7 +222,7 @@ def baseline_als(y, lam, p, niter=10):
 
 
 def gaussian_fitting_curve(two_theta,intensity,x_interval,set_pars):
-    """Fit the curve use Gaussian distribution.
+    """Fit the curve use Gaussian distribution in selected x interval data.
 
     Args:
         two_theta (1-D array)
@@ -230,7 +231,8 @@ def gaussian_fitting_curve(two_theta,intensity,x_interval,set_pars):
         set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
 
     Returns:
-        fitting.best_fit, fitting.params.items(): _description_
+        fitting.best_fit (1-D array): best fit of the y interval value
+        fitting.params.items (dict_items): contains amplitude, amplitude, fwhm, sigma and height value for peak fitting result
     """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     mod = GaussianModel(prefix='g1_')
@@ -253,6 +255,18 @@ def gaussian_fitting_curve(two_theta,intensity,x_interval,set_pars):
 
 
 def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot the fitting of the curve use Gaussian distribution in selected x interval data.
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+        baseline_pars (1-D list): parameter of the baseline guess in format [smoothness,weighting of positive residuals]
+    
+    Returns:
+        Plot
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Gaussian fitting for dataset %d' %i)
@@ -271,6 +285,8 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars)
 
 
 def gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot all of the fitting of the curve use Gaussian distribution in selected x interval data.
+    """
     for i in range(len(intensity)):
         plt.title('Gaussian fitting for dataset %d' %i)
         gaussian_fitting_plot(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
@@ -279,6 +295,8 @@ def gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_p
 
 
 def gaussian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot fitting result graph: contains original data, fitting data and the errors of fitting.
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('Gaussian fitting result' )
@@ -299,6 +317,18 @@ def gaussian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
 
 #lorentzian
 def lorentzian_fitting_curve(two_theta,intensity,x_interval,set_pars):
+    """Fit the curve use Lorentzian distribution in selected x interval data.
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+
+    Returns:
+        fitting.best_fit (1-D array): best fit of the y interval value
+        fitting.params.items (dict_items): contains amplitude, amplitude, fwhm, sigma and height value for peak fitting result
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     mod = LorentzianModel(prefix='l1_')
     pars = mod.guess(y_interval_value, x=x_interval_value)
@@ -320,6 +350,18 @@ def lorentzian_fitting_curve(two_theta,intensity,x_interval,set_pars):
 
 
 def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot the fitting of the curve use Lorentzian distribution in selected x interval data.
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+        baseline_pars (1-D list): parameter of the baseline guess in format [smoothness,weighting of positive residuals]
+    
+    Returns:
+        Plot
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Lorentzian fitting for dataset %d' %i)
@@ -335,6 +377,8 @@ def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_par
 
 
 def lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot all of the fitting of the curve use Lorentzian distribution in selected x interval data.
+    """
     for i in range(len(intensity)):
         plt.title('Lorentzian fitting for dataset %d' %i)
         lorentzian_fitting_plot(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
@@ -342,6 +386,8 @@ def lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline
 
 
 def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot fitting result graph: contains original data, fitting data and the errors of fitting.
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('Lorentzian fitting result' )
@@ -362,6 +408,18 @@ def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars)
 
 #PseudoVoigt
 def PseudoVoigt_fitting_curve(two_theta,intensity,x_interval,set_pars):
+    """Fit the curve use PseudoVoigt distribution in selected x interval data.
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+
+    Returns:
+        fitting.best_fit (1-D array): best fit of the y interval value
+        fitting.params.items (dict_items): contains amplitude, amplitude, fwhm, sigma and height value for peak fitting result
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     mod = PseudoVoigtModel(prefix='p1_')
     pars = mod.guess(y_interval_value, x=x_interval_value)
@@ -381,6 +439,18 @@ def PseudoVoigt_fitting_curve(two_theta,intensity,x_interval,set_pars):
 
 
 def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot the fitting of the curve use PseudoVoigt distribution in selected x interval data.
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+        baseline_pars (1-D list): parameter of the baseline guess in format [smoothness,weighting of positive residuals]
+    
+    Returns:
+        Plot
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('PseudoVoigt fitting for dataset %d' %i)
@@ -396,6 +466,8 @@ def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pa
 
 
 def PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot all of the fitting of the curve use PseudoVoigt distribution in selected x interval data.
+    """
     for i in range(len(intensity)):
         plt.title('PseudoVoigt fitting for dataset %d' %i)
         PseudoVoigt_fitting_plot(two_theta,intensity[i],x_interval,set_pars,baseline_pars)
@@ -403,6 +475,8 @@ def PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baselin
 
 
 def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Plot fitting result graph: contains original data, fitting data and the errors of fitting.
+    """
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('PseudoVoigt fitting result' )
@@ -421,6 +495,18 @@ def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars
 
 
 def gaussian_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_pars):
+    """Print Gaussian fitting value
+
+    Args:
+        two_theta (1-D array)
+        intensity (1-D array)
+        x_interval (1-D list)
+        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+        baseline_pars (1-D list): parameter of the baseline guess in format [smoothness,weighting of positive residuals]
+
+    Returns:
+        dic(dictionary): a dictionary that contains amplitude, amplitude, fwhm, sigma and height value for peak fitting result
+    """
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
@@ -532,12 +618,14 @@ def change_fwhm(csvFile):
     readData = pd.read_csv(tPath)   
     fwhm = readData.iloc[:,6].tolist()  
     # time = list(range(0,220,10))  
-    time = list(range(0,len(fwhm)*10,10))        
+    # time = list(range(0,len(fwhm)*10,10)) 
+    temperature = list(range(55,500,5) )      
     error = readData.iloc[:,7].tolist()
-    plt.plot(time, fwhm,'r-^')            
-    plt.errorbar(time, fwhm, yerr=error)
+    plt.plot(temperature, fwhm)  
+    plt.scatter(temperature, fwhm)          
+    plt.errorbar(temperature, fwhm, yerr=error)
     plt.title("change in FWHM in {}".format(csvPre))              
-    plt.xlabel("time")                
+    plt.xlabel("temperature")                
     plt.ylabel("FWHM") 
     plt.savefig("./change in FWHM and height/change in FWHM in {}".format(csvPre))                 
     plt.show()
@@ -557,13 +645,16 @@ def change_height(csvFile):
     readData = pd.read_csv(tPath)
     height = readData.iloc[:,8].tolist()  
     # time = list(range(0,220,10)) 
-    time = list(range(0,len(height)*10,10))         
+    # time = list(range(0,len(height)*10,10))
+    temperature = list(range(55,500,5) )         
     error = readData.iloc[:,9].tolist()
-    plt.plot(time, height,'r-^')            
-    plt.errorbar(time, height, yerr=error)
+    # plt.plot(temperature, height)
+    # plt.scatter(temperature, height,s=2)       
+    plt.errorbar(temperature, height, yerr=error, fmt = 'o',markersize='2')
     plt.title("change in height in {}".format(csvPre))              
-    plt.xlabel("time")                
+    plt.xlabel("temperature")                
     plt.ylabel("height") 
+    plt.ylim(-500,2000)
     plt.savefig("./change in FWHM and height/change in height in {}".format(csvPre))                 
     plt.show() 
 
