@@ -196,27 +196,53 @@ def interval_data(two_theta,intensity,x_interval):
 
 
 
-def baseline_als(y, lam, p, niter=10):
+# def baseline_als(y, lam, p, niter=10):
+#     """Generate a baseline to make the distribution flat on.
+
+#     Args:
+#         y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
+#         lam (int): 2nd derivative constraint (smoothness parameter)
+#         p (float): Weighting of positive residuals
+#         niter (int, optional): Maximum number of iterations. Defaults to 10.
+
+#     Returns:
+#         z: baseline of the data
+#     """
+#     L = len(y)
+#     matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
+#     w = np.ones(L)  #set all numbers in array to 1
+#     for i in range(niter):
+#         W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
+#         Z = W + lam * matrix.dot(matrix.transpose())
+#         z = spsolve(Z, w*y)
+#         w = p * (y > z) + (1-p) * (y < z)
+#     return z
+
+
+def baseline_als(y, lam, p,a):
     """Generate a baseline to make the distribution flat on.
 
-    Args:
-        y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
-        lam (int): 2nd derivative constraint (smoothness parameter)
-        p (float): Weighting of positive residuals
-        niter (int, optional): Maximum number of iterations. Defaults to 10.
+     Args:
+         y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
+         lam (int): 2nd derivative constraint (smoothness parameter)
+         p (float): Weighting of positive residuals
+         niter (int, optional): Maximum number of iterations. Defaults to 10.
 
-    Returns:
-        z: baseline of the data
-    """
-    L = len(y)
-    matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
-    w = np.ones(L)  #set all numbers in array to 1
-    for i in range(niter):
+     Returns:
+         z: baseline of the data
+     """
+    if a == 0:
+        L = len(y)
+        matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
+        w = np.ones(L)  #set all numbers in array to 1
+
         W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
         Z = W + lam * matrix.dot(matrix.transpose())
         z = spsolve(Z, w*y)
         w = p * (y > z) + (1-p) * (y < z)
-    return z
+        return z
+    else:
+        return [a]*len(y)
 
 
 
