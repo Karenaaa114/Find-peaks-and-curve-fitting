@@ -237,7 +237,7 @@ def gaussian_fitting_curve(two_theta,intensity,x_interval,set_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     mod = GaussianModel(prefix='g1_')
     pars = mod.guess(y_interval_value, x=x_interval_value)
-    pars['g1_center'].set(value=set_pars[0][0])
+    pars['g1_center'].set(value=set_pars[0][0],min=set_pars[0][0])
     pars['g1_sigma'].set(value=set_pars[0][1])
     pars['g1_amplitude'].set(value=set_pars[0][2])
     for i in range(1,len(set_pars)):
@@ -272,7 +272,9 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # plt.title('Gaussian fitting for dataset %d' %i)
     # baseline = baseline_als(y_interval_value,10000,0.0001)
     # baseline = baseline_als(y_interval_value,10000,0.01)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    # baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    # baseline = plt.axhline(y=1250)
+    baseline = [1250]*len(x_interval_value)
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -509,7 +511,8 @@ def gaussian_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_pars
     """
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    # baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline = [1250]*len(x_interval_value)
     baseline_subtracted = y_interval_value - baseline
     _,fitting_params = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     for name, pars in fitting_params:
@@ -687,8 +690,10 @@ def change_height(csvFile):
     temperature = list(range(55,500,5) )         
     error = readData.iloc[:,9].tolist()
     # plt.plot(temperature, height)
-    # plt.scatter(temperature, height,s=2)       
-    plt.errorbar(temperature, height, yerr=error, fmt = 'o',markersize='2')
+    plt.scatter(temperature, height,s=2)   
+    # plt.errorbar(time, height, yerr=error, fmt = 'o',markersize='2')    
+    # plt.errorbar(temperature, height, yerr=error, fmt = 'o',markersize='2')
+    
     plt.title("change in height in {}".format(csvPre))              
     plt.xlabel("temperature")                
     plt.ylabel("height") 
