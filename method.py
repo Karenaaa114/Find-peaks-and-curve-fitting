@@ -223,13 +223,15 @@ def baseline_als(y, lam, p,a):
     """Generate a baseline to make the distribution flat on.
 
      Args:
-         y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
-         lam (int): 2nd derivative constraint (smoothness parameter)
-         p (float): Weighting of positive residuals
-         niter (int, optional): Maximum number of iterations. Defaults to 10.
+        y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
+        lam (int): 2nd derivative constraint (smoothness parameter)
+        p (float): Weighting of positive residuals
+        a (int): y value for baseline
 
      Returns:
-         z: baseline of the data
+        z: baseline of the data
+        [a]*len(y): baseline of the data(a straight line with same y value)
+
      """
     if a == 0:
         L = len(y)
