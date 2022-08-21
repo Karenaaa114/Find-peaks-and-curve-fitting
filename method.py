@@ -219,7 +219,7 @@ def interval_data(two_theta,intensity,x_interval):
 #     return z
 
 
-def baseline_als(y, lam, p,a):
+def baseline_als(y, lam, p, a):
     """Generate a baseline to make the distribution flat on.
 
      Args:
@@ -233,7 +233,7 @@ def baseline_als(y, lam, p,a):
         [a]*len(y): baseline of the data(a straight line with same y value)
 
      """
-    if a == 0:
+    if a == -1:
         L = len(y)
         matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
         w = np.ones(L)  #set all numbers in array to 1
@@ -298,11 +298,7 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars)
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Gaussian fitting for dataset %d' %i)
-    # baseline = baseline_als(y_interval_value,10000,0.0001)
-    # baseline = baseline_als(y_interval_value,10000,0.01)
-    # baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
-    # baseline = plt.axhline(y=1250)
-    baseline = [1250]*len(x_interval_value)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -330,7 +326,7 @@ def gaussian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('Gaussian fitting result' )
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -395,7 +391,7 @@ def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_par
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Lorentzian fitting for dataset %d' %i)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -421,7 +417,7 @@ def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars)
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('Lorentzian fitting result' )
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -484,7 +480,7 @@ def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pa
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('PseudoVoigt fitting for dataset %d' %i)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -510,7 +506,7 @@ def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('PseudoVoigt fitting result' )
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -539,8 +535,7 @@ def gaussian_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_pars
     """
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    # baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
-    baseline = [1250]*len(x_interval_value)
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     _,fitting_params = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     for name, pars in fitting_params:
@@ -581,7 +576,7 @@ def PseudoVoigt_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_p
     """
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     _,fitting_params = PseudoVoigt_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     for name, pars in fitting_params:
@@ -669,7 +664,7 @@ def chisquare(obs, exp):
 
 def gaussian_fit_index(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
     baseline_subtracted = y_interval_value - baseline
     fitting,_ = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
 

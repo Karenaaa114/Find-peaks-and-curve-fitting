@@ -40,18 +40,18 @@ def main():
     # x_interval = [20,35]
     # set_pars = [[26.4,1,600],[28.4,1,750],[30,1,750]]
     # baseline_pars = [10000,0.0001]
-    x_interval = [27,29.5] #（002）
-    set_pars = [[28.4,1,940],[0,0,0]]
-    baseline_pars = [10000,0.0001]
-    # x_interval = [42,46] #（022）
-    # set_pars = [[44,1,600],[0,0,0]]
-    # baseline_pars = [100000,0.0001]
+    # x_interval = [27,29.5] #（002）
+    # set_pars = [[28.4,1,940],[0,0,0]]
+    # baseline_pars = [10000,0.0001,1250]
+    x_interval = [42,46] #（022）
+    set_pars = [[44,1,600],[0,0,0]]
+    baseline_pars = [10000000000,0.0001,-1]
     # x_interval = [46.5,48.5] #（110）
     # set_pars = [[47,1,400],[0,0,0]]
-    # baseline_pars = [10000,0.0001]
+    # baseline_pars = [10000,0.0001,-1]
     # print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars))
     # gaussian_fitting_plot(two_theta,intensity[60],x_interval,set_pars,baseline_pars)
-    # gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
+    gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
 
