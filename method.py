@@ -219,7 +219,7 @@ def interval_data(two_theta,intensity,x_interval):
 #     return z
 
 
-def baseline_als(y, lam, p, a):
+def baseline_als(y, lam, p, a, niter=10):
     """Generate a baseline to make the distribution flat on.
 
      Args:
@@ -233,18 +233,19 @@ def baseline_als(y, lam, p, a):
         [a]*len(y): baseline of the data(a straight line with same y value)
 
      """
-    if a == -1:
-        L = len(y)
-        matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
-        w = np.ones(L)  #set all numbers in array to 1
-
+    L = len(y)
+    matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
+    w = np.ones(L)  #set all numbers in array to 1
+    for i in range(niter):
         W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
         Z = W + lam * matrix.dot(matrix.transpose())
         z = spsolve(Z, w*y)
         w = p * (y > z) + (1-p) * (y < z)
+
+    if a == -1:
         return z
     else:
-        return [a]*len(y)
+        return [a]*L
 
 
 
