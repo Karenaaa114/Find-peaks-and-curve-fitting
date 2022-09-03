@@ -70,6 +70,13 @@ def open_gr_file(data_path):
     return two_theta, intensities
 
 
+def read_temp_file(tempFile):
+    with open(tempFile) as file_name:
+        data = np.loadtxt(file_name, delimiter=",")
+    temperature = data.transpose()
+    return temperature
+
+
 
 # log10 of all data
 # two_theta_log = np.log10(two_theta)
@@ -119,6 +126,7 @@ def plot_data_log10(two_theta, intensity):
     plt.xlabel(r'$2\theta$')
     plt.ylabel("intensity")
     plt.show()
+
 
 def plot_data_3d(two_theta, intensity):
     """Plot the 3D graph of data with two_theta is x-axis, time is y-axis and intensity is z-axis.
@@ -178,6 +186,35 @@ def plot_data_3d_range(two_theta, intensity, x_interval):
 #     print( "center = %0.7f (+/-) %0.7f" % (popt_gauss[i][1], perr_gauss[i][1]))
 #     print( "width = %0.7f (+/-) %0.7f" % (popt_gauss[i][2], perr_gauss[i][2]))
 #     print( "area = %0.7f" % np.trapz(Gaussian(two_theta, *popt_gauss[i])))
+
+
+def plot_data_3d_range_tempt(two_theta, intensity, x_interval,tempFile):
+    """Plot the 3D graph of data with two_theta is x-axis, time is y-axis and intensity is z-axis.
+
+    Args:
+        two_theta (1-D array)
+        intensity (2-D array)
+    """    
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_box_aspect(aspect = (20,10,10))
+    
+    tempt_data = read_temp_file(tempFile)
+    for i in range(len(tempt_data)): 
+        # time = np.ones(len(intensity[0]))*i*10
+        x_interval_value, y_interval_value = interval_data(two_theta,intensity[i],x_interval)
+        # time = np.ones(len(y_interval_value))*i*10
+        # temperature = np.ones(len(y_interval_value))*i*4.68
+        temperature = (np.ones(len(y_interval_value)))*tempt_data[i]
+        ax.plot3D(x_interval_value[0:len(y_interval_value)], temperature, y_interval_value[0:len(y_interval_value)], 'black', linewidth = 0.3)
+    
+    ax.set_xlabel(r'$2\theta$')
+    ax.set_ylabel("temperature")
+    ax.set_zlabel("intensity")
+    plt.show()
+
+
 
 
 def get_index_in_interval(datax,x_interval):
@@ -686,7 +723,7 @@ def toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars):
 
 
 
-
+from scipy import stats
     
 
 def chisquare(obs, exp):
@@ -704,7 +741,12 @@ def chisquare(obs, exp):
     if obs.size != exp.size:
         print('The size of the observed array and the expected array is not equal')
         exit()
-    return ((obs - exp) ** 2 / exp).sum(axis=0)
+    one = (obs - exp) ** 2 / exp
+    value = one.sum(axis=0)
+    return value
+
+
+
 
 
 
@@ -715,10 +757,14 @@ def gaussian_fit_index(two_theta,intensity,x_interval,set_pars,baseline_pars):
     baseline_subtracted = y_interval_value - baseline
     fitting,_ = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
 
-    observed = y_interval_value
-    expected = fitting + baseline
+    # observed = y_interval_value
+    # expected = fitting + baseline
+    observed = baseline_subtracted
+    expected = fitting
 
     return chisquare(observed,expected)
+
+
 
 
 

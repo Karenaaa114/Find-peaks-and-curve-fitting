@@ -32,13 +32,19 @@ from method import *
 def main():
     filename = "ZnO transformation.csv"
     two_theta, intensity = read_csv_file(filename)
+    # temperature = read_temp_file("temp=zno2-znO.csv")
+    # print(temperature)
     # single(two_theta,intensity,[10000,0.0001,-1])
     # plot_data_88(two_theta, intensity)
     # plot_data(two_theta, intensity)
     # plot_data_3d(two_theta, intensity)
     # plot_data_3d_range(two_theta, intensity, [46.5,48.5])
     # plot_data_3d_range(two_theta, intensity, [24,34])
-    dataset_number = 3
+
+    tempFile = "temp=zno2-znO.txt"
+    plot_data_3d_range_tempt(two_theta, intensity, [24,34],tempFile)
+
+    dataset_number = 66
     # x_interval = [20,35]
     # set_pars = [[26.4,1,600],[28.4,1,750],[30,1,750]]
     # baseline_pars = [10000,0.0001]
@@ -56,18 +62,20 @@ def main():
     set_pars = [[28.4,1,940],[30,1,1200],[44.8,2,800],[47.3,1,500]]
     baseline_pars = [10000,0.0001,-1]
     # print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars))
-    gaussian_fitting_plot(two_theta,intensity[66],x_interval,set_pars,baseline_pars)
+    # gaussian_fitting_plot(two_theta,intensity[66],x_interval,set_pars,baseline_pars)
     # gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
 
-    # gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
-    # lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
-    # PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+    gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+    lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
+    PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
     # toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars)
-    all_change_fwhm()
-    all_change_height()
+    # all_change_fwhm()
+    # all_change_height()
     # change_height("peak2.csv")
+
+    print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars))
 
 
 
