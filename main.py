@@ -32,6 +32,8 @@ from method import *
 def main():
     filename = "ZnO transformation.csv"
     two_theta, intensity = read_csv_file(filename)
+    # single(two_theta,intensity,[10000,0.0001,-1])
+    # plot_data_88(two_theta, intensity)
     # plot_data(two_theta, intensity)
     # plot_data_3d(two_theta, intensity)
     # plot_data_3d_range(two_theta, intensity, [46.5,48.5])
@@ -42,15 +44,19 @@ def main():
     # baseline_pars = [10000,0.0001]
     # x_interval = [27,29.5] #（002）
     # set_pars = [[28.4,1,940],[0,0,0]]
-    # baseline_pars = [10000,0.0001,1250]
-    x_interval = [42,46.8] #（022）
-    set_pars = [[44.8,2,800],[0,0,0]]
-    baseline_pars = [10000,0.0001,-1]
+    # baseline_pars = [10000,0.0001,-1]
+    # x_interval = [42,46.8] #（022）
+    # set_pars = [[44.8,2,800],[0,0,0]]
+    # baseline_pars = [10000,0.0001,-1]
     # x_interval = [46.5,48.5] #（110）
     # set_pars = [[47.3,1,500],[0,0,0]]
     # baseline_pars = [10000,0.0001,500]
+    # #all
+    # x_interval = [27,48.5]
+    # set_pars = [[28.4,1,940],[30,1,1200],[44.8,2,800],[47.3,1,500]]
+    # baseline_pars = [10000,0.0001,-1]
     # print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars))
-    # gaussian_fitting_plot(two_theta,intensity[60],x_interval,set_pars,baseline_pars)
+    # gaussian_fitting_plot(two_theta,intensity[66],x_interval,set_pars,baseline_pars)
     # gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)

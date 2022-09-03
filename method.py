@@ -90,6 +90,21 @@ def plot_data(two_theta, intensity):
     plt.savefig('graph of all dataset')
     plt.show()
 
+def plot_data_88(two_theta, intensity):
+    """Plot the graph of data with two_theta is x-axis and intensity is y-axis.
+
+    Args:
+        two_theta (1-D array)
+        intensity (2-D array)
+    """
+    plt.plot(two_theta, intensity[87])
+    # plt.title("intensity")
+    plt.xlabel(r'$2\theta$')
+    plt.ylabel("intensity")
+    plt.ylim(0,3700)
+    plt.savefig('graph of all dataset')
+    plt.show()
+
 def plot_data_log10(two_theta, intensity):
     """Plot the graph of data after log10 with two_theta is x-axis and intensity is y-axis.
 
@@ -257,7 +272,7 @@ def gaussian_fitting_curve(two_theta,intensity,x_interval,set_pars):
         two_theta (1-D array)
         intensity (1-D array)
         x_interval (1-D list)
-        set_pars (n-D list): paramter of the fitting guess in format [center,sigma,amplitude]
+        set_pars (n-D list): parameters of the fitting guess in format [center,sigma,amplitude]
 
     Returns:
         fitting.best_fit (1-D array): best fit of the y interval value
@@ -309,6 +324,19 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # plt.savefig(f"{name}_plot.png")
     plt.show()
     
+# def single(two_theta,intensity,baseline_pars):
+#     plt.plot(two_theta,intensity[87], '-', label='original data')
+#     # plt.title('Gaussian fitting for dataset %d' %i)
+#     baseline = baseline_als(intensity[87],baseline_pars[0],baseline_pars[1],baseline_pars[2])
+#     baseline_subtracted = intensity[87] - baseline
+#     # plt.plot(two_theta, baseline,':',label='baseline')
+#     plt.plot(two_theta, baseline_subtracted,label='after background subtraction')
+#     plt.legend()
+#     plt.xlabel(r'$2\theta$')
+#     plt.ylabel("intensity")
+#     # plt.savefig(f"{name}_plot.png")
+#     plt.show()
+
 
 
 def gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars):
