@@ -51,12 +51,12 @@ def main():
     # x_interval = [46.5,48.5] #（110）
     # set_pars = [[47.3,1,500],[0,0,0]]
     # baseline_pars = [10000,0.0001,500]
-    # #all
-    # x_interval = [27,48.5]
-    # set_pars = [[28.4,1,940],[30,1,1200],[44.8,2,800],[47.3,1,500]]
-    # baseline_pars = [10000,0.0001,-1]
+    #all
+    x_interval = [27,48.5]
+    set_pars = [[28.4,1,940],[30,1,1200],[44.8,2,800],[47.3,1,500]]
+    baseline_pars = [10000,0.0001,-1]
     # print(gaussian_fit_index(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars))
-    # gaussian_fitting_plot(two_theta,intensity[66],x_interval,set_pars,baseline_pars)
+    gaussian_fitting_plot(two_theta,intensity[66],x_interval,set_pars,baseline_pars)
     # gaussian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # lorentzian_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # PseudoVoigt_fitting_plot_all(two_theta,intensity,x_interval,set_pars,baseline_pars)
@@ -64,8 +64,8 @@ def main():
     # gaussian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
     # lorentzian_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
     # PseudoVoigt_plot_error(two_theta,intensity[dataset_number],x_interval,set_pars,baseline_pars)
-    toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars)
-    # all_change_fwhm()
+    # toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars)
+    all_change_fwhm()
     all_change_height()
     # change_height("peak2.csv")
 
