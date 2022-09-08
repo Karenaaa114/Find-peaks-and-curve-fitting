@@ -78,9 +78,6 @@ def read_temp_file(tempFile):
 
 
 
-# log10 of all data
-# two_theta_log = np.log10(two_theta)
-# intensity_log = np.log10(intensity)
 
 def plot_data(two_theta, intensity):
     """Plot the graph of data with two_theta is x-axis and intensity is y-axis.
@@ -104,8 +101,7 @@ def plot_data_88(two_theta, intensity):
         two_theta (1-D array)
         intensity (2-D array)
     """
-    plt.plot(two_theta, intensity[87])
-    # plt.title("intensity")
+    plt.plot(two_theta, intensity[1])
     plt.xlabel(r'$2\theta$')
     plt.ylabel("intensity")
     plt.ylim(0,3700)
@@ -121,7 +117,6 @@ def plot_data_log10(two_theta, intensity):
     """
     for i in range(len(intensity)):
         plt.loglog(two_theta, intensity[i], linewidth = 0.5)
-        # plt.plot(two_theta_log, intensity_log[i], linewidth = 0.5)
     plt.title("intensity")
     plt.xlabel(r'$2\theta$')
     plt.ylabel("intensity")
@@ -142,7 +137,6 @@ def plot_data_3d(two_theta, intensity):
     
 
     for i in range(len(intensity)):
-        # time = list(range(0,i*10,10)) 
         time = np.ones(len(intensity[0]))*i*10
         ax.plot3D(two_theta, time, intensity[i], 'black', linewidth = 0.3)
     
@@ -167,14 +161,12 @@ def plot_data_3d_range(two_theta, intensity, x_interval):
     
 
     for i in range(len(intensity)): 
-        # time = np.ones(len(intensity[0]))*i*10
         x_interval_value, y_interval_value = interval_data(two_theta,intensity[i],x_interval)
-        # time = np.ones(len(y_interval_value))*i*10
         temperature = np.ones(len(y_interval_value))*i*4.68
         ax.plot3D(x_interval_value, temperature, y_interval_value, 'black', linewidth = 0.3)
     
     ax.set_xlabel(r'$2\theta$')
-    ax.set_ylabel("temperature")
+    ax.set_ylabel("temperature/◦C")
     ax.set_zlabel("intensity")
     plt.show()
 
@@ -202,15 +194,12 @@ def plot_data_3d_range_tempt(two_theta, intensity, x_interval,tempFile):
     
     tempt_data = read_temp_file(tempFile)
     for i in range(len(tempt_data)): 
-        # time = np.ones(len(intensity[0]))*i*10
         x_interval_value, y_interval_value = interval_data(two_theta,intensity[i],x_interval)
-        # time = np.ones(len(y_interval_value))*i*10
-        # temperature = np.ones(len(y_interval_value))*i*4.68
         temperature = (np.ones(len(y_interval_value)))*tempt_data[i]
         ax.plot3D(x_interval_value[0:len(y_interval_value)], temperature, y_interval_value[0:len(y_interval_value)], 'black', linewidth = 0.3)
     
     ax.set_xlabel(r'$2\theta$')
-    ax.set_ylabel("temperature")
+    ax.set_ylabel("temperature/◦C")
     ax.set_zlabel("intensity")
     plt.show()
 
@@ -248,56 +237,30 @@ def interval_data(two_theta,intensity,x_interval):
 
 
 
-# def baseline_als(y, lam, p, niter=10):
-#     """Generate a baseline to make the distribution flat on.
-
-#     Args:
-#         y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
-#         lam (int): 2nd derivative constraint (smoothness parameter)
-#         p (float): Weighting of positive residuals
-#         niter (int, optional): Maximum number of iterations. Defaults to 10.
-
-#     Returns:
-#         z: baseline of the data
-#     """
-#     L = len(y)
-#     matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
-#     w = np.ones(L)  #set all numbers in array to 1
-#     for i in range(niter):
-#         W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
-#         Z = W + lam * matrix.dot(matrix.transpose())
-#         z = spsolve(Z, w*y)
-#         w = p * (y > z) + (1-p) * (y < z)
-#     return z
-
-
-def baseline_als(y, lam, p, a, niter=10):
+def baseline_als(y, lam, p, niter=10):
     """Generate a baseline to make the distribution flat on.
 
-     Args:
+    Args:
         y (1-D array): the value of y that need baseline(Matrix with spectra in rows)
         lam (int): 2nd derivative constraint (smoothness parameter)
         p (float): Weighting of positive residuals
-        a (int): y value for baseline
+        niter (int, optional): Maximum number of iterations. Defaults to 10.
 
-     Returns:
+    Returns:
         z: baseline of the data
-        [a]*len(y): baseline of the data(a straight line with same y value)
-
-     """
+    """
     L = len(y)
     matrix = sparse.csc_matrix(np.diff(np.eye(L), 2))  #Sparse matrix in CSC format
     w = np.ones(L)  #set all numbers in array to 1
-    for i in range(niter):
-        W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
-        Z = W + lam * matrix.dot(matrix.transpose())
-        z = spsolve(Z, w*y)
-        w = p * (y > z) + (1-p) * (y < z)
+    # for i in range(niter):
+    W = sparse.spdiags(w, 0, L, L)   #sparse.spdiags(Matrix diagonals are stored in rows, (k=0 main diagonal, k>0 The kth upper diagonal, k<0 The kth lower diagonal), result shape, result shape)
+    Z = W + lam * matrix.dot(matrix.transpose())
+    z = spsolve(Z, w*y)
+    w = p * (y > z) + (1-p) * (y < z)
+    return z
 
-    if a == -1:
-        return z
-    else:
-        return [a]*L
+
+
 
 
 
@@ -351,7 +314,7 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars)
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Gaussian fitting for dataset %d' %i)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -363,18 +326,7 @@ def gaussian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pars)
     # plt.savefig(f"{name}_plot.png")
     plt.show()
     
-# def single(two_theta,intensity,baseline_pars):
-#     plt.plot(two_theta,intensity[87], '-', label='original data')
-#     # plt.title('Gaussian fitting for dataset %d' %i)
-#     baseline = baseline_als(intensity[87],baseline_pars[0],baseline_pars[1],baseline_pars[2])
-#     baseline_subtracted = intensity[87] - baseline
-#     # plt.plot(two_theta, baseline,':',label='baseline')
-#     plt.plot(two_theta, baseline_subtracted,label='after background subtraction')
-#     plt.legend()
-#     plt.xlabel(r'$2\theta$')
-#     plt.ylabel("intensity")
-#     # plt.savefig(f"{name}_plot.png")
-#     plt.show()
+
 
 
 
@@ -396,7 +348,7 @@ def gaussian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('Gaussian fitting result' )
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -463,7 +415,7 @@ def lorentzian_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_par
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('Lorentzian fitting for dataset %d' %i)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -493,7 +445,7 @@ def lorentzian_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars)
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('Lorentzian fitting result' )
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -558,7 +510,7 @@ def PseudoVoigt_fitting_plot(two_theta,intensity,x_interval,set_pars,baseline_pa
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     # plt.title('PseudoVoigt fitting for dataset %d' %i)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     plt.plot(x_interval_value, baseline,':',label='baseline')
     plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -588,7 +540,7 @@ def PseudoVoigt_plot_error(two_theta,intensity,x_interval,set_pars,baseline_pars
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
     plt.plot(x_interval_value, y_interval_value, '-', label='original data')
     plt.title('PseudoVoigt fitting result' )
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     # plt.plot(x_interval_value, baseline,':',label='baseline')
     # plt.plot(x_interval_value, baseline_subtracted,label='after background subtraction')
@@ -619,7 +571,7 @@ def gaussian_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_pars
     """
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     _,fitting_params = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     for name, pars in fitting_params:
@@ -660,7 +612,7 @@ def PseudoVoigt_fitting_value(two_theta,intensity,x_interval,set_pars,baseline_p
     """
     dic = {}
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     _,fitting_params = PseudoVoigt_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
     for name, pars in fitting_params:
@@ -723,7 +675,6 @@ def toCsv(two_theta,intensity,x_interval,set_pars,baseline_pars):
 
 
 
-from scipy import stats
     
 
 def chisquare(obs, exp):
@@ -753,7 +704,7 @@ def chisquare(obs, exp):
 
 def gaussian_fit_index(two_theta,intensity,x_interval,set_pars,baseline_pars):
     x_interval_value, y_interval_value = interval_data(two_theta,intensity,x_interval)
-    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1],baseline_pars[2])
+    baseline = baseline_als(y_interval_value,baseline_pars[0],baseline_pars[1])
     baseline_subtracted = y_interval_value - baseline
     fitting,_ = gaussian_fitting_curve(x_interval_value,baseline_subtracted,x_interval,set_pars)
 
