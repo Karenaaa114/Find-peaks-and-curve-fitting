@@ -40,3 +40,8 @@ Note that when users input the range, guess for peak and baseline parameter, the
 
 ## Platform
 This program is written in Python 3.8.8 version and can be run on MAC system. The Integrated Development Environment used in this program is Visual Studio Code. Users can download it to run the program.
+
+## Before running
+Input the commands in the terminal:
+https://github.com/Karenaaa114/Find-peaks-and-curve-fitting.git
+pip3 install lmfit
