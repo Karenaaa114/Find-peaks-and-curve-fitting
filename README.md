@@ -32,6 +32,7 @@ By input guess of center, sigma and amplitude of peaks, .csv files of peaks’ i
 
 main.py:
 In this file, users can use two kinds of terminals. 
+![image]()
 
 
 ## Platform
