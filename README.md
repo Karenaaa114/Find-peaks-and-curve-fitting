@@ -16,10 +16,12 @@ Users can plot the data in 3D for selected range
 This program generates baseline to do a background subtraction of the curve
 
 5. fitting the curve with Gaussian/Lorentzian/PseudoVoigt methods and plot:
-By input guess of center, sigma and amplitude of peaks and baseline parameters, this program can plot for selected/all data set.
+By input guess of center, sigma and amplitude of peaks and baseline parameters, this program can plot for selected/all data set. An example of the correct output is 
+![image](https://github.com/Karenaaa114/Find-peaks-and-curve-fitting/blob/main/graph/curve%20fitting.png)
 
 6. plot Gaussian/Lorentzian/PseudoVoigt fitting result:
 The original data, fitting data and the difference between these two data (error) can be shown in the fitting result graph.
+![image](https://github.com/Karenaaa114/Find-peaks-and-curve-fitting/blob/main/graph/fitting%20result.png)
 
 7. print fitting index:
 This program uses chi-square to calculate the fitting index
