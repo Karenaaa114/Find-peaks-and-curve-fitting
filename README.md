@@ -32,7 +32,7 @@ By input guess of center, sigma and amplitude of peaks, .csv files of peaks’ i
 
 main.py:
 In this file, users can use two kinds of terminals. 
-![image]()
+![image](https://github.com/Karenaaa114/Find-peaks-and-curve-fitting/blob/main/graph/flow%20chart%20of%20program.png)
 
 
 ## Platform
