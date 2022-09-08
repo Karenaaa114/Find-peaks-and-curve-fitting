@@ -13,19 +13,19 @@ Users can plot the data in 2D for selected range
 Users can plot the data in 3D for selected range
 
 4.generate the baseline
-This program generates baseline algorithm to do a background subtraction
+This program generates baseline to do a background subtraction
 
-5.fitting the curve with Gaussian/Lorentzian/PseudoVoigt methods
-
-6.plot Gaussian/Lorentzian/PseudoVoigt fitting for selected/all data set.
+5.fitting the curve with Gaussian/Lorentzian/PseudoVoigt methods and plot
+By input guess of center, sigma and amplitude of peaks and baseline parameters, this program can plot for selected/all data set.
 
 7.plot Gaussian/Lorentzian/PseudoVoigt fitting result
-The original data, fitting data as well as the difference between these two data (error) can be shown
-in fitting result graph.
+The original data, fitting data and the difference between these two data (error) can be shown in the fitting result graph.
 
 8.print fitting index
+This program uses chi-square to calculate the fitting index
 
 9.export information of peaks to excel.
+By input guess of center, sigma and amplitude of peaks, .csv files of peaks’ information will be outputted. The csv file contains amplitude, center, sigma, full Width at half Maximum, height and the errors of these parameters. It is worth noting that for every peak there will be a csv file stored in ‘peakFiles’ folder. 
 
 10.plot variation in full width at half maximum(FWHM) and variation in height
 
